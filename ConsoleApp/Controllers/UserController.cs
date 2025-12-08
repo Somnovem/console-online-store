@@ -33,9 +33,18 @@ public class UserController
             this.userService.Add(newUser);
             Console.WriteLine("User registered successfully!");
         }
-        catch (Exception ex)
+        catch (ArgumentException ex)
         {
             Console.WriteLine($"Error registering user: {ex.Message}");
+        }
+        catch (InvalidOperationException ex)
+        {
+            Console.WriteLine($"Error registering user: {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Unexpected error registering user: {ex.Message}");
+            throw;
         }
 
         InputHelper.PressAnyKeyToContinue();
@@ -65,9 +74,18 @@ public class UserController
             this.userService.Update(updatedUser);
             Console.WriteLine($"User with ID {id} updated successfully!");
         }
-        catch (Exception ex)
+        catch (ArgumentException ex)
         {
             Console.WriteLine($"Error updating user: {ex.Message}");
+        }
+        catch (InvalidOperationException ex)
+        {
+            Console.WriteLine($"Error updating user: {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Unexpected error updating user: {ex.Message}");
+            throw;
         }
 
         InputHelper.PressAnyKeyToContinue();
@@ -82,9 +100,18 @@ public class UserController
             this.userService.Delete(id);
             Console.WriteLine($"User with ID {id} deleted successfully!");
         }
-        catch (Exception ex)
+        catch (ArgumentException ex)
         {
             Console.WriteLine($"Error deleting user: {ex.Message}");
+        }
+        catch (InvalidOperationException ex)
+        {
+            Console.WriteLine($"Error deleting user: {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Unexpected error deleting user: {ex.Message}");
+            throw;
         }
 
         InputHelper.PressAnyKeyToContinue();
@@ -106,9 +133,18 @@ public class UserController
                 Console.WriteLine($"User with ID {id} not found.");
             }
         }
-        catch (Exception ex)
+        catch (ArgumentException ex)
         {
             Console.WriteLine($"Error showing user: {ex.Message}");
+        }
+        catch (InvalidOperationException ex)
+        {
+            Console.WriteLine($"Error showing user: {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Unexpected error showing user: {ex.Message}");
+            throw;
         }
 
         InputHelper.PressAnyKeyToContinue();
@@ -132,9 +168,18 @@ public class UserController
                 Console.WriteLine("No users found.");
             }
         }
-        catch (Exception ex)
+        catch (ArgumentException ex)
         {
             Console.WriteLine($"Error showing all users: {ex.Message}");
+        }
+        catch (InvalidOperationException ex)
+        {
+            Console.WriteLine($"Error showing all users: {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Unexpected error showing all users: {ex.Message}");
+            throw;
         }
 
         InputHelper.PressAnyKeyToContinue();
@@ -158,9 +203,18 @@ public class UserController
                 Console.WriteLine("No user roles found.");
             }
         }
-        catch (Exception ex)
+        catch (ArgumentException ex)
         {
             Console.WriteLine($"Error showing all user roles: {ex.Message}");
+        }
+        catch (InvalidOperationException ex)
+        {
+            Console.WriteLine($"Error showing all user roles: {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Unexpected error showing all user roles: {ex.Message}");
+            throw;
         }
 
         InputHelper.PressAnyKeyToContinue();
@@ -175,9 +229,18 @@ public class UserController
             this.userRoleService.Add(userRole);
             Console.WriteLine("User role added successfully!");
         }
-        catch (Exception ex)
+        catch (ArgumentException ex)
         {
             Console.WriteLine($"Error adding user role: {ex.Message}");
+        }
+        catch (InvalidOperationException ex)
+        {
+            Console.WriteLine($"Error adding user role: {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Unexpected error adding user role: {ex.Message}");
+            throw;
         }
 
         InputHelper.PressAnyKeyToContinue();
@@ -201,9 +264,18 @@ public class UserController
             this.userRoleService.Update(updatedRole);
             Console.WriteLine($"User Role with ID {id} updated successfully!");
         }
-        catch (Exception ex)
+        catch (ArgumentException ex)
         {
             Console.WriteLine($"Error updating user role: {ex.Message}");
+        }
+        catch (InvalidOperationException ex)
+        {
+            Console.WriteLine($"Error updating user role: {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Unexpected error updating user role: {ex.Message}");
+            throw;
         }
 
         InputHelper.PressAnyKeyToContinue();
@@ -218,9 +290,18 @@ public class UserController
             this.userRoleService.Delete(id);
             Console.WriteLine($"User Role with ID {id} deleted successfully!");
         }
-        catch (Exception ex)
+        catch (ArgumentException ex)
         {
             Console.WriteLine($"Error deleting user role: {ex.Message}");
+        }
+        catch (InvalidOperationException ex)
+        {
+            Console.WriteLine($"Error deleting user role: {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Unexpected error deleting user role: {ex.Message}");
+            throw;
         }
 
         InputHelper.PressAnyKeyToContinue();

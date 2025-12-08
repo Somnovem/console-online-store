@@ -35,6 +35,7 @@
             {
                 return MapToModel(entity);
             }
+
             return null;
         }
 
@@ -42,7 +43,9 @@
         public void Add(AbstractModel model)
         {
             if (model is not UserModel userModel)
+            {
                 throw new ArgumentException("Model is not a UserModel.", nameof(model));
+            }
 
             var entity = MapToEntity(userModel);
             this.repository.Add(entity);
@@ -78,7 +81,9 @@
         public void Update(AbstractModel model)
         {
             if (model is not UserModel userModel)
+            {
                 throw new ArgumentException("Model is not a UserModel.", nameof(model));
+            }
 
             var entity = MapToEntity(userModel);
             this.repository.Update(entity);

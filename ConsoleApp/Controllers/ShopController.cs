@@ -31,9 +31,18 @@ public class ShopController
             this.customerOrderService.Add(order);
             Console.WriteLine("Order created successfully!");
         }
-        catch (Exception ex)
+        catch (ArgumentException ex)
         {
             Console.WriteLine($"Error creating order: {ex.Message}");
+        }
+        catch (InvalidOperationException ex)
+        {
+            Console.WriteLine($"Error creating order: {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Unexpected error creating order: {ex.Message}");
+            throw;
         }
 
         InputHelper.PressAnyKeyToContinue();
@@ -57,9 +66,18 @@ public class ShopController
             this.customerOrderService.Update(updatedOrder);
             Console.WriteLine($"Order with ID {id} updated successfully!");
         }
-        catch (Exception ex)
+        catch (ArgumentException ex)
         {
             Console.WriteLine($"Error updating order: {ex.Message}");
+        }
+        catch (InvalidOperationException ex)
+        {
+            Console.WriteLine($"Error updating order: {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Unexpected error updating order: {ex.Message}");
+            throw;
         }
 
         InputHelper.PressAnyKeyToContinue();
@@ -74,9 +92,18 @@ public class ShopController
             this.customerOrderService.Delete(id);
             Console.WriteLine($"Order with ID {id} cancelled/deleted successfully!");
         }
-        catch (Exception ex)
+        catch (ArgumentException ex)
         {
             Console.WriteLine($"Error cancelling/deleting order: {ex.Message}");
+        }
+        catch (InvalidOperationException ex)
+        {
+            Console.WriteLine($"Error cancelling/deleting order: {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Unexpected error cancelling/deleting order: {ex.Message}");
+            throw;
         }
 
         InputHelper.PressAnyKeyToContinue();
@@ -98,9 +125,18 @@ public class ShopController
                 Console.WriteLine($"Order with ID {id} not found.");
             }
         }
-        catch (Exception ex)
+        catch (ArgumentException ex)
         {
             Console.WriteLine($"Error showing order: {ex.Message}");
+        }
+        catch (InvalidOperationException ex)
+        {
+            Console.WriteLine($"Error showing order: {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Unexpected error showing order: {ex.Message}");
+            throw;
         }
 
         InputHelper.PressAnyKeyToContinue();
@@ -124,9 +160,18 @@ public class ShopController
                 Console.WriteLine("No orders found.");
             }
         }
-        catch (Exception ex)
+        catch (ArgumentException ex)
         {
             Console.WriteLine($"Error showing all orders: {ex.Message}");
+        }
+        catch (InvalidOperationException ex)
+        {
+            Console.WriteLine($"Error showing all orders: {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Unexpected error showing all orders: {ex.Message}");
+            throw;
         }
 
         InputHelper.PressAnyKeyToContinue();
@@ -160,9 +205,18 @@ public class ShopController
             this.customerOrderService.Update(order);
             Console.WriteLine($"Order {orderId} status changed to {newState.StateName} successfully!");
         }
-        catch (Exception ex)
+        catch (ArgumentException ex)
         {
             Console.WriteLine($"An error occurred while changing order status: {ex.Message}");
+        }
+        catch (InvalidOperationException ex)
+        {
+            Console.WriteLine($"An error occurred while changing order status: {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Unexpected error while changing order status: {ex.Message}");
+            throw;
         }
 
         InputHelper.PressAnyKeyToContinue();
@@ -177,9 +231,18 @@ public class ShopController
             this.orderDetailService.Add(orderDetail);
             Console.WriteLine("Order Detail added successfully!");
         }
-        catch (Exception ex)
+        catch (ArgumentException ex)
         {
             Console.WriteLine($"Error adding order detail: {ex.Message}");
+        }
+        catch (InvalidOperationException ex)
+        {
+            Console.WriteLine($"Error adding order detail: {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Unexpected error adding order detail: {ex.Message}");
+            throw;
         }
 
         InputHelper.PressAnyKeyToContinue();
@@ -203,9 +266,18 @@ public class ShopController
             this.orderDetailService.Update(updatedDetail);
             Console.WriteLine($"Order Detail with ID {id} updated successfully!");
         }
-        catch (Exception ex)
+        catch (ArgumentException ex)
         {
             Console.WriteLine($"Error updating order detail: {ex.Message}");
+        }
+        catch (InvalidOperationException ex)
+        {
+            Console.WriteLine($"Error updating order detail: {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Unexpected error updating order detail: {ex.Message}");
+            throw;
         }
 
         InputHelper.PressAnyKeyToContinue();
@@ -220,9 +292,18 @@ public class ShopController
             this.orderDetailService.Delete(id);
             Console.WriteLine($"Order Detail with ID {id} deleted successfully!");
         }
-        catch (Exception ex)
+        catch (ArgumentException ex)
         {
             Console.WriteLine($"Error deleting order detail: {ex.Message}");
+        }
+        catch (InvalidOperationException ex)
+        {
+            Console.WriteLine($"Error deleting order detail: {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Unexpected error deleting order detail: {ex.Message}");
+            throw;
         }
 
         InputHelper.PressAnyKeyToContinue();
@@ -246,9 +327,18 @@ public class ShopController
                 Console.WriteLine("No order details found.");
             }
         }
-        catch (Exception ex)
+        catch (ArgumentException ex)
         {
             Console.WriteLine($"Error showing all order details: {ex.Message}");
+        }
+        catch (InvalidOperationException ex)
+        {
+            Console.WriteLine($"Error showing all order details: {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Unexpected error showing all order details: {ex.Message}");
+            throw;
         }
 
         InputHelper.PressAnyKeyToContinue();
@@ -272,9 +362,18 @@ public class ShopController
                 Console.WriteLine("No order states found.");
             }
         }
-        catch (Exception ex)
+        catch (ArgumentException ex)
         {
             Console.WriteLine($"Error showing all order states: {ex.Message}");
+        }
+        catch (InvalidOperationException ex)
+        {
+            Console.WriteLine($"Error showing all order states: {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Unexpected error showing all order states: {ex.Message}");
+            throw;
         }
 
         InputHelper.PressAnyKeyToContinue();

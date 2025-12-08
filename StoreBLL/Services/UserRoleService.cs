@@ -80,7 +80,11 @@
         /// </summary>
         private static UserRoleModel? MapToModel(UserRole? entity)
         {
-            if (entity == null) return null;
+            if (entity == null)
+            {
+                return null;
+            }
+
             return new UserRoleModel(entity.Id, entity.UserRoleName);
         }
 

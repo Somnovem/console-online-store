@@ -81,7 +81,10 @@
         /// </summary>
         private static ProductModel? MapToModel(Product? entity)
         {
-            if (entity == null) return null;
+            if (entity == null)
+            {
+                return null;
+            }
 
             return new ProductModel(
                 entity.Id,
@@ -96,7 +99,10 @@
         /// </summary>
         private static Product? MapToEntity(ProductModel? model)
         {
-            if (model == null) return null;
+            if (model == null)
+            {
+                return null;
+            }
 
             return new Product(
                 model.Id,

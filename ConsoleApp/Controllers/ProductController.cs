@@ -33,9 +33,18 @@ public class ProductController
             this.productService.Add(product);
             Console.WriteLine("Product added successfully!");
         }
-        catch (Exception ex)
+        catch (ArgumentException ex)
         {
             Console.WriteLine($"Error adding product: {ex.Message}");
+        }
+        catch (InvalidOperationException ex)
+        {
+            Console.WriteLine($"Error adding product: {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Unexpected error adding product: {ex.Message}");
+            throw;
         }
 
         InputHelper.PressAnyKeyToContinue();
@@ -61,9 +70,18 @@ public class ProductController
             this.productService.Update(updatedProduct);
             Console.WriteLine($"Product with ID {id} updated succesfully!");
         }
-        catch (Exception ex)
+        catch (ArgumentException ex)
         {
             Console.WriteLine($"Error updating product: {ex.Message}");
+        }
+        catch (InvalidOperationException ex)
+        {
+            Console.WriteLine($"Error updating product: {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Unexpected error updating product: {ex.Message}");
+            throw;
         }
 
         InputHelper.PressAnyKeyToContinue();
@@ -78,9 +96,18 @@ public class ProductController
             this.productService.Delete(id);
             Console.WriteLine($"Product with ID {id} deleted successfully!");
         }
-        catch (Exception ex)
+        catch (ArgumentException ex)
         {
             Console.WriteLine($"Error deleting product: {ex.Message}");
+        }
+        catch (InvalidOperationException ex)
+        {
+            Console.WriteLine($"Error deleting product: {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Unexpected error deleting product: {ex.Message}");
+            throw;
         }
 
         InputHelper.PressAnyKeyToContinue();
@@ -102,9 +129,18 @@ public class ProductController
                 Console.WriteLine($"Product with ID {id} not found.");
             }
         }
-        catch (Exception ex)
+        catch (ArgumentException ex)
         {
             Console.WriteLine($"Error showing product: {ex.Message}");
+        }
+        catch (InvalidOperationException ex)
+        {
+            Console.WriteLine($"Error showing product: {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Unexpected error showing product: {ex.Message}");
+            throw;
         }
 
         InputHelper.PressAnyKeyToContinue();
@@ -128,9 +164,18 @@ public class ProductController
                 Console.WriteLine("No products found.");
             }
         }
-        catch (Exception ex)
+        catch (ArgumentException ex)
         {
             Console.WriteLine($"Error showing all products: {ex.Message}");
+        }
+        catch (InvalidOperationException ex)
+        {
+            Console.WriteLine($"Error showing all products: {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Unexpected error showing all products: {ex.Message}");
+            throw;
         }
 
         InputHelper.PressAnyKeyToContinue();
@@ -145,9 +190,18 @@ public class ProductController
             this.categoryService.Add(category);
             Console.WriteLine("Category added successfully!");
         }
-        catch (Exception ex)
+        catch (ArgumentException ex)
         {
             Console.WriteLine($"Error adding category: {ex.Message}");
+        }
+        catch (InvalidOperationException ex)
+        {
+            Console.WriteLine($"Error adding category: {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Unexpected error adding category: {ex.Message}");
+            throw;
         }
 
         InputHelper.PressAnyKeyToContinue();
@@ -171,9 +225,18 @@ public class ProductController
             this.categoryService.Update(updatedCategory);
             Console.WriteLine($"Category with ID {id} updated successfully!");
         }
-        catch (Exception ex)
+        catch (ArgumentException ex)
         {
             Console.WriteLine($"Error updating category {ex.Message}");
+        }
+        catch (InvalidOperationException ex)
+        {
+            Console.WriteLine($"Error updating category: {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Unexpected error updating category: {ex.Message}");
+            throw;
         }
 
         InputHelper.PressAnyKeyToContinue();
@@ -188,9 +251,18 @@ public class ProductController
             this.categoryService.Delete(id);
             Console.WriteLine($"Category with ID {id} deleted successfully!");
         }
-        catch (Exception ex)
+        catch (ArgumentException ex)
         {
             Console.WriteLine($"Error deleting category: {ex.Message}");
+        }
+        catch (InvalidOperationException ex)
+        {
+            Console.WriteLine($"Error deleting category: {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Unexpected error deleting category: {ex.Message}");
+            throw;
         }
 
         InputHelper.PressAnyKeyToContinue();
@@ -214,9 +286,18 @@ public class ProductController
                 Console.WriteLine("No categories found.");
             }
         }
-        catch (Exception ex)
+        catch (ArgumentException ex)
         {
             Console.WriteLine($"Error showing all categories: {ex.Message}");
+        }
+        catch (InvalidOperationException ex)
+        {
+            Console.WriteLine($"Error showing all categories: {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Unexpected error showing all categories: {ex.Message}");
+            throw;
         }
 
         InputHelper.PressAnyKeyToContinue();
@@ -231,9 +312,18 @@ public class ProductController
             this.productTitleService.Add(productTitle);
             Console.WriteLine("Product Title added successfully!");
         }
-        catch (Exception ex)
+        catch (ArgumentException ex)
         {
             Console.WriteLine($"Error adding product title: {ex.Message}");
+        }
+        catch (InvalidOperationException ex)
+        {
+            Console.WriteLine($"Error adding product title: {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Unexpected error adding product title: {ex.Message}");
+            throw;
         }
 
         InputHelper.PressAnyKeyToContinue();
@@ -257,9 +347,18 @@ public class ProductController
             this.productTitleService.Update(updatedTitle);
             Console.WriteLine($"Product Title with ID {id} updated successfully!");
         }
+        catch (ArgumentException ex)
+        {
+            Console.WriteLine($"Error updating product title: {ex.Message}");
+        }
+        catch (InvalidOperationException ex)
+        {
+            Console.WriteLine($"Error updating product title: {ex.Message}");
+        }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error updating product title {ex.Message}");
+            Console.WriteLine($"Unexpected error updating product title: {ex.Message}");
+            throw;
         }
 
         InputHelper.PressAnyKeyToContinue();
@@ -274,9 +373,18 @@ public class ProductController
             this.productTitleService.Delete(id);
             Console.WriteLine($"Product Title with ID {id} deleted successfully!");
         }
-        catch (Exception ex)
+        catch (ArgumentException ex)
         {
             Console.WriteLine($"Error deleting product title: {ex.Message}");
+        }
+        catch (InvalidOperationException ex)
+        {
+            Console.WriteLine($"Error deleting product title: {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Unexpected error deleting product title: {ex.Message}");
+            throw;
         }
 
         InputHelper.PressAnyKeyToContinue();
@@ -300,9 +408,18 @@ public class ProductController
                 Console.WriteLine("No product titles found.");
             }
         }
-        catch (Exception ex)
+        catch (ArgumentException ex)
         {
             Console.WriteLine($"Error showing all product titles: {ex.Message}");
+        }
+        catch (InvalidOperationException ex)
+        {
+            Console.WriteLine($"Error showing all product titles: {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Unexpected error showing all product titles: {ex.Message}");
+            throw;
         }
 
         InputHelper.PressAnyKeyToContinue();
@@ -317,9 +434,18 @@ public class ProductController
             this.manufacturerService.Add(manufacturer);
             Console.WriteLine("Manufacturer added succesfully!");
         }
-        catch (Exception ex)
+        catch (ArgumentException ex)
         {
             Console.WriteLine($"Error adding manufacturer: {ex.Message}");
+        }
+        catch (InvalidOperationException ex)
+        {
+            Console.WriteLine($"Error adding manufacturer: {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Unexpected error adding manufacturer: {ex.Message}");
+            throw;
         }
 
         InputHelper.PressAnyKeyToContinue();
@@ -343,9 +469,18 @@ public class ProductController
             this.manufacturerService.Update(updatedManufacturer);
             Console.WriteLine($"Manufacturer with ID {id} updated successfully!");
         }
-        catch (Exception ex)
+        catch (ArgumentException ex)
         {
             Console.WriteLine($"Error updating manufacturer: {ex.Message}");
+        }
+        catch (InvalidOperationException ex)
+        {
+            Console.WriteLine($"Error updating manufacturer: {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Unexpected error updating manufacturer: {ex.Message}");
+            throw;
         }
 
         InputHelper.PressAnyKeyToContinue();
@@ -360,9 +495,18 @@ public class ProductController
             this.manufacturerService.Delete(id);
             Console.WriteLine($"Manufacturer with ID {id} deleted successfully!");
         }
-        catch (Exception ex)
+        catch (ArgumentException ex)
         {
             Console.WriteLine($"Error deleting manufacturer: {ex.Message}");
+        }
+        catch (InvalidOperationException ex)
+        {
+            Console.WriteLine($"Error deleting manufacturer: {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Unexpected error deleting manufacturer: {ex.Message}");
+            throw;
         }
 
         InputHelper.PressAnyKeyToContinue();
@@ -386,9 +530,18 @@ public class ProductController
                 Console.WriteLine("No manufacturers found.");
             }
         }
-        catch (Exception ex)
+        catch (ArgumentException ex)
         {
             Console.WriteLine($"Error showing all manufacturers: {ex.Message}");
+        }
+        catch (InvalidOperationException ex)
+        {
+            Console.WriteLine($"Error showing all manufacturers: {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Unexpected error showing all manufacturers: {ex.Message}");
+            throw;
         }
 
         InputHelper.PressAnyKeyToContinue();

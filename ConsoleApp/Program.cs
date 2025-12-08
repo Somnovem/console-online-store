@@ -31,10 +31,21 @@ namespace ConsoleApp
                     var userMenuController = services.GetRequiredService<UserMenuController>();
                     userMenuController.Start();
                 }
-                catch (Exception ex)
+                catch (ArgumentException ex)
                 {
                     Console.WriteLine($"Encountered an error: {ex.Message}");
                     Console.WriteLine(ex.ToString());
+                }
+                catch (InvalidOperationException ex)
+                {
+                    Console.WriteLine($"Encountered an error: {ex.Message}");
+                    Console.WriteLine(ex.ToString());
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Unexpected error: {ex.Message}");
+                    Console.WriteLine(ex.ToString());
+                    throw;
                 }
             }
         }

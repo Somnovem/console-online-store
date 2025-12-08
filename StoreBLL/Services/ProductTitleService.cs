@@ -81,7 +81,11 @@
         /// </summary>
         private static ProductTitleModel? MapToModel(ProductTitle? entity)
         {
-            if (entity == null) return null;
+            if (entity == null)
+            {
+                return null;
+            }
+
             return new ProductTitleModel(entity.Id, entity.Title, entity.CategoryId);
         }
 
@@ -90,7 +94,11 @@
         /// </summary>
         private static ProductTitle? MapToEntity(ProductTitleModel? model)
         {
-            if (model == null) return null;
+            if (model == null)
+            {
+                return null;
+            }
+
             return new ProductTitle(model.Id, model.Title, model.CategoryId);
         }
     }

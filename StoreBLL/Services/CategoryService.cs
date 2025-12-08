@@ -1,4 +1,4 @@
-﻿namespace StoreBLL.Services
+namespace StoreBLL.Services
 {
     using System;
     using System.Collections.Generic;
@@ -62,7 +62,7 @@
             return this.categoryRepository.GetAll()
                 .Select(MapToModel)
                 .Where(model => model != null)
-                .ToList()!;
+                .ToList() !;
         }
 
         /// <summary>

@@ -55,8 +55,8 @@
         {
             return this.customerOrderRepository.GetAll()
                 .Select(MapToModel)
-                .Where(m => m != null)!
-                .ToList()!;
+                .Where(m => m != null) !
+                .ToList() !;
         }
 
         /// <inheritdoc/>
@@ -65,7 +65,7 @@
             var entity = this.customerOrderRepository.GetById(id)
                 ?? throw new InvalidOperationException($"Customer order with ID {id} not found.");
 
-            return MapToModel(entity)!;
+            return MapToModel(entity) !;
         }
 
         /// <inheritdoc/>

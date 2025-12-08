@@ -73,10 +73,20 @@ public class UserMenuController
                 InputHelper.PressAnyKeyToContinue();
             }
         }
-        catch (Exception ex)
+        catch (ArgumentException ex)
         {
             Console.WriteLine($"An error occurred during login: {ex.Message}");
             InputHelper.PressAnyKeyToContinue();
+        }
+        catch (InvalidOperationException ex)
+        {
+            Console.WriteLine($"An error occurred during login: {ex.Message}");
+            InputHelper.PressAnyKeyToContinue();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Unexpected error during login: {ex.Message}");
+            throw;
         }
     }
 
@@ -128,9 +138,18 @@ public class UserMenuController
 
                 selectedItem.action?.Invoke();
             }
+            catch (ArgumentException ex)
+            {
+                DisplayError(ex);
+            }
+            catch (InvalidOperationException ex)
+            {
+                DisplayError(ex);
+            }
             catch (Exception ex)
             {
                 DisplayError(ex);
+                throw;
             }
         }
     }

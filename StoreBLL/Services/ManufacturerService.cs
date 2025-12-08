@@ -52,8 +52,8 @@
         {
             return this.manufacturerRepository.GetAll()
                 .Select(MapToModel)
-                .Where(model => model != null)!
-                .ToList()!;
+                .Where(model => model != null) !
+                .ToList() !;
         }
 
         /// <inheritdoc/>

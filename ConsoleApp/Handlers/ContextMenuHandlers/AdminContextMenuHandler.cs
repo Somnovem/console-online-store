@@ -20,9 +20,18 @@ namespace ConsoleApp.MenuBuilder
                 this.service.Add(item);
                 Console.WriteLine("Item added successfully.");
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
                 Console.WriteLine($"Error adding item: {ex.Message}");
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine($"Error adding item: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Unexpected error adding item: {ex.Message}");
+                throw;
             }
             finally
             {
@@ -39,9 +48,18 @@ namespace ConsoleApp.MenuBuilder
                 this.service.Delete(id);
                 Console.WriteLine($"Item with ID {id} removed successfully.");
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
                 Console.WriteLine($"Error removing item: {ex.Message}");
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine($"Error removing item: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Unexpected error removing item: {ex.Message}");
+                throw;
             }
             finally
             {
@@ -71,9 +89,18 @@ namespace ConsoleApp.MenuBuilder
                 this.service.Update(updatedItem);
                 Console.WriteLine($"Item with ID {id} updated successfully!");
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
                 Console.WriteLine($"Error updating item: {ex.Message}");
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine($"Error updating item: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Unexpected error updating item: {ex.Message}");
+                throw;
             }
             finally
             {

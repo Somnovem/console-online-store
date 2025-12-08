@@ -82,10 +82,7 @@
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="entity"/> is null.</exception>
         private static OrderDetailModel MapToModel(OrderDetail? entity)
         {
-            if (entity == null)
-            {
-                throw new ArgumentNullException(nameof(entity));
-            }
+            ArgumentNullException.ThrowIfNull(entity);
 
             return new OrderDetailModel(
                 entity.Id,
@@ -103,10 +100,7 @@
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="model"/> is null.</exception>
         private static OrderDetail MapToEntity(OrderDetailModel? model)
         {
-            if (model == null)
-            {
-                throw new ArgumentNullException(nameof(model));
-            }
+            ArgumentNullException.ThrowIfNull(model);
 
             return new OrderDetail(
                 model.Id,
