@@ -1,34 +1,30 @@
 ﻿namespace StoreDAL.Data.InitDataFactory;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using StoreDAL.Entities;
 
-public class ReleaseDataFactory : AbstractDataFactory
+public class ReleaseDataFactory : IDataFactory
 {
-    public override Category[] GetCategoryData()
+    public Category[] GetCategoryData()
     {
         return Array.Empty<Category>();
     }
 
-    public override CustomerOrder[] GetCustomerOrderData()
+    public CustomerOrder[] GetCustomerOrderData()
     {
         return Array.Empty<CustomerOrder>();
     }
 
-    public override Manufacturer[] GetManufacturerData()
+    public Manufacturer[] GetManufacturerData()
     {
         return Array.Empty<Manufacturer>();
     }
 
-    public override OrderDetail[] GetOrderDetailData()
+    public OrderDetail[] GetOrderDetailData()
     {
         return Array.Empty<OrderDetail>();
     }
 
-    public override OrderState[] GetOrderStateData()
+    public OrderState[] GetOrderStateData()
     {
         return new[]
         {
@@ -43,27 +39,27 @@ public class ReleaseDataFactory : AbstractDataFactory
         };
     }
 
-    public override Product[] GetProductData()
+    public Product[] GetProductData()
     {
         return Array.Empty<Product>();
     }
 
-    public override ProductTitle[] GetProductTitleData()
+    public ProductTitle[] GetProductTitleData()
     {
         return Array.Empty<ProductTitle>();
     }
 
-    public override User[] GetUserData()
+    public User[] GetUserData()
     {
         return Array.Empty<User>();
     }
 
-    public override UserRole[] GetUserRoleData()
+    public UserRole[] GetUserRoleData()
     {
         return new[]
         {
             new UserRole(1, "Admin"),
-            new UserRole(2, "Registred"),
+            new UserRole(2, "Registered"),
             new UserRole(3, "Guest"),
         };
     }

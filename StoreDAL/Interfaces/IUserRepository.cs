@@ -1,7 +1,6 @@
 ﻿namespace StoreDAL.Interfaces;
-using Entities;
+using StoreDAL.Entities;
 
 public interface IUserRepository : IRepository<User>
 {
-    public User? GetUserByLogin(string? login);
 }

@@ -1,20 +1,27 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿namespace StoreDAL.Entities;
 
-namespace StoreDAL.Entities;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 [Table("manufacturers")]
 public class Manufacturer : BaseEntity
 {
     public Manufacturer()
+        : base()
     {
     }
 
-    public Manufacturer(int id, string name)
+    public Manufacturer(int id, string manufacturerName)
         : base(id)
     {
-        this.Name = name;
+        this.ManufacturerName = manufacturerName;
     }
 
-    [Column("manufacturer_name", TypeName = "varchar(100)")]
-    public string Name { get; set; }
+    [Required]
+    [Column("manufacturer_name")]
+    [MaxLength(100)]
+    public string ManufacturerName { get; set; }
+
+    public virtual IList<Product> Products { get; set; } = new List<Product>();
 }

@@ -1,14 +1,15 @@
 ﻿namespace StoreDAL.Data;
+
 using System;
 using Microsoft.EntityFrameworkCore;
-using InitDataFactory;
-using Entities;
+using StoreDAL.Data.InitDataFactory;
+using StoreDAL.Entities;
 
 public class StoreDbContext : DbContext
 {
-    private readonly AbstractDataFactory factory;
+    private readonly IDataFactory factory;
 
-    public StoreDbContext(DbContextOptions options, AbstractDataFactory factory)
+    public StoreDbContext(DbContextOptions<StoreDbContext> options, IDataFactory factory)
         : base(options)
     {
         this.factory = factory;
@@ -35,6 +36,56 @@ public class StoreDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         ArgumentNullException.ThrowIfNull(modelBuilder);
+        base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Entity<User>()
+            .HasOne(u => u.UserRole)
+            .WithMany(ur => ur.Users)
+            .HasForeignKey(u => u.UserRoleId)
+            .IsRequired();
+
+        modelBuilder.Entity<ProductTitle>()
+            .HasOne(pt => pt.Category)
+            .WithMany(c => c.ProductTitles)
+            .HasForeignKey(pt => pt.CategoryId)
+            .IsRequired();
+
+        modelBuilder.Entity<Product>()
+            .HasOne(p => p.ProductTitle)
+            .WithMany(pt => pt.Products)
+            .HasForeignKey(p => p.ProductTitleId)
+            .IsRequired();
+
+        modelBuilder.Entity<Product>()
+            .HasOne(p => p.Manufacturer)
+            .WithMany(m => m.Products)
+            .HasForeignKey(p => p.ManufacturerId)
+            .IsRequired();
+
+        modelBuilder.Entity<CustomerOrder>()
+            .HasOne(co => co.Customer)
+            .WithMany(u => u.CustomerOrders)
+            .HasForeignKey(co => co.CustomerId)
+            .IsRequired();
+
+        modelBuilder.Entity<CustomerOrder>()
+            .HasOne(co => co.OrderState)
+            .WithMany(os => os.CustomerOrders)
+            .HasForeignKey(co => co.OrderStateId)
+            .IsRequired();
+
+        modelBuilder.Entity<OrderDetail>()
+            .HasOne(od => od.CustomerOrder)
+            .WithMany(co => co.CustomerOrderDetails)
+            .HasForeignKey(od => od.CustomerOrderId)
+            .IsRequired();
+
+        modelBuilder.Entity<OrderDetail>()
+            .HasOne(od => od.Product)
+            .WithMany(p => p.CustomerOrderDetails)
+            .HasForeignKey(od => od.ProductId)
+            .IsRequired();
+
         modelBuilder.Entity<Category>().HasData(this.factory.GetCategoryData());
         modelBuilder.Entity<Manufacturer>().HasData(this.factory.GetManufacturerData());
         modelBuilder.Entity<OrderState>().HasData(this.factory.GetOrderStateData());

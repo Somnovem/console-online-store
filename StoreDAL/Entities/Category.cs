@@ -1,5 +1,6 @@
 ﻿namespace StoreDAL.Entities;
-using StoreDAL.Entities;
+
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -11,14 +12,16 @@ public class Category : BaseEntity
     {
     }
 
-    public Category(int id, string name)
+    public Category(int id, string categoryName)
         : base(id)
     {
-        this.Name = name;
+        this.CategoryName = categoryName;
     }
 
-    [Column("category_name", TypeName = "varchar(100)")]
-    public string Name { get; set; }
+    [Required]
+    [Column("category_name")]
+    [MaxLength(100)]
+    public string CategoryName { get; set; }
 
-    public virtual IList<ProductTitle> Titles { get; set; }
+    public virtual IList<ProductTitle> ProductTitles { get; set; } = new List<ProductTitle>();
 }

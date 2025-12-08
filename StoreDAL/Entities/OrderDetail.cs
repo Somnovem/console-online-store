@@ -1,4 +1,5 @@
 ﻿namespace StoreDAL.Entities;
+
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -6,31 +7,36 @@ using System.ComponentModel.DataAnnotations.Schema;
 public class OrderDetail : BaseEntity
 {
     public OrderDetail()
+        : base()
     {
     }
 
-    public OrderDetail(int id, int orderId, int productId, decimal price, int amount)
+    public OrderDetail(int id, int customerOrderId, int productId, decimal price, int productAmount)
         : base(id)
     {
-        this.OrderId = orderId;
+        this.CustomerOrderId = customerOrderId;
         this.ProductId = productId;
         this.Price = price;
-        this.ProductAmount = amount;
+        this.ProductAmount = productAmount;
     }
 
     [Column("customer_order_id")]
-    public int OrderId { get; set; }
+    public int CustomerOrderId { get; set; }
+
+    [ForeignKey("CustomerOrderId")]
+    public CustomerOrder CustomerOrder { get; set; }
 
     [Column("product_id")]
     public int ProductId { get; set; }
 
-    [Column("price")]
+    [ForeignKey("ProductId")]
+    public Product Product { get; set; }
+
+    [Required]
+    [Column("price", TypeName = "decimal(18, 2)")]
     public decimal Price { get; set; }
 
+    [Required]
     [Column("product_amount")]
     public int ProductAmount { get; set; }
-
-    public CustomerOrder Order { get; set; }
-
-    public Product Product { get; set; }
 }

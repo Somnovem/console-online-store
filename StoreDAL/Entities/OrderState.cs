@@ -1,11 +1,14 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿namespace StoreDAL.Entities;
 
-namespace StoreDAL.Entities;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 [Table("order_states")]
 public class OrderState : BaseEntity
 {
     public OrderState()
+        : base()
     {
     }
 
@@ -15,8 +18,10 @@ public class OrderState : BaseEntity
         this.StateName = stateName;
     }
 
-    [Column("state_name", TypeName = "varchar(100)")]
+    [Required]
+    [MaxLength(50)]
+    [Column("state_name")]
     public string StateName { get; set; }
 
-    public virtual IList<CustomerOrder> Order { get; set; }
+    public virtual IList<CustomerOrder> CustomerOrders { get; set; } = new List<CustomerOrder>();
 }

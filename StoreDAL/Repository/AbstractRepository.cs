@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using StoreDAL.Data;
+﻿using StoreDAL.Data;
 
 namespace StoreDAL.Repository
 {
@@ -13,7 +8,6 @@ namespace StoreDAL.Repository
 
         protected AbstractRepository(StoreDbContext context)
         {
-            ArgumentNullException.ThrowIfNull(context);
             this.context = context;
         }
     }

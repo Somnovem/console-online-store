@@ -1,9 +1,8 @@
 ﻿namespace StoreDAL.Repository;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using StoreDAL.Data;
 using StoreDAL.Entities;
@@ -22,13 +21,16 @@ public class OrderStateRepository : AbstractRepository, IOrderStateRepository
 
     public void Add(OrderState entity)
     {
+        ArgumentNullException.ThrowIfNull(entity);
         this.dbSet.Add(entity);
         this.context.SaveChanges();
     }
 
     public void Delete(OrderState entity)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(entity);
+        this.dbSet.Remove(entity);
+        this.context.SaveChanges();
     }
 
     public void DeleteById(int id)
@@ -48,7 +50,10 @@ public class OrderStateRepository : AbstractRepository, IOrderStateRepository
 
     public IEnumerable<OrderState> GetAll(int pageNumber, int rowCount)
     {
-        throw new NotImplementedException();
+        return this.dbSet
+                   .Skip((pageNumber - 1) * rowCount)
+                   .Take(rowCount)
+                   .ToList();
     }
 
     public OrderState GetById(int id)
@@ -58,6 +63,8 @@ public class OrderStateRepository : AbstractRepository, IOrderStateRepository
 
     public void Update(OrderState entity)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(entity);
+        this.dbSet.Update(entity);
+        this.context.SaveChanges();
     }
 }

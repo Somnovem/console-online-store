@@ -1,48 +1,74 @@
-﻿using System;
+﻿namespace StoreDAL.Repository;
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using StoreDAL.Data;
 using StoreDAL.Entities;
 using StoreDAL.Interfaces;
 
-namespace StoreDAL.Repository
+public class OrderDetailRepository : AbstractRepository, IOrderDetailRepository
 {
-    public class OrderDetailRepository : IOrderDetailRepository
+    public OrderDetailRepository(StoreDbContext context)
+        : base(context)
     {
-        public void Add(OrderDetail entity)
-        {
-            throw new NotImplementedException();
-        }
+    }
 
-        public void Delete(OrderDetail entity)
-        {
-            throw new NotImplementedException();
-        }
+    public void Add(OrderDetail entity)
+    {
+        ArgumentNullException.ThrowIfNull(entity);
+        this.context.OrderDetails.Add(entity);
+        this.context.SaveChanges();
+    }
 
-        public void DeleteById(int id)
-        {
-            throw new NotImplementedException();
-        }
+    public void Delete(OrderDetail entity)
+    {
+        ArgumentNullException.ThrowIfNull(entity);
+        this.context.OrderDetails.Remove(entity);
+        this.context.SaveChanges();
+    }
 
-        public IEnumerable<OrderDetail> GetAll()
+    public void DeleteById(int id)
+    {
+        var orderDetailToDelete = this.context.OrderDetails.Find(id);
+        if (orderDetailToDelete != null)
         {
-            throw new NotImplementedException();
+            this.context.OrderDetails.Remove(orderDetailToDelete);
+            this.context.SaveChanges();
         }
+    }
 
-        public IEnumerable<OrderDetail> GetAll(int pageNumber, int rowCount)
-        {
-            throw new NotImplementedException();
-        }
+    public IEnumerable<OrderDetail> GetAll()
+    {
+        return this.context.OrderDetails
+                   .Include(od => od.CustomerOrder)
+                   .Include(od => od.Product)
+                   .ToList();
+    }
 
-        public OrderDetail GetById(int id)
-        {
-            throw new NotImplementedException();
-        }
+    public IEnumerable<OrderDetail> GetAll(int pageNumber, int rowCount)
+    {
+        return this.context.OrderDetails
+                   .Include(od => od.CustomerOrder)
+                   .Include(od => od.Product)
+                   .Skip((pageNumber - 1) * rowCount)
+                   .Take(rowCount)
+                   .ToList();
+    }
 
-        public void Update(OrderDetail entity)
-        {
-            throw new NotImplementedException();
-        }
+    public OrderDetail GetById(int id)
+    {
+        return this.context.OrderDetails
+                   .Include(od => od.CustomerOrder)
+                   .Include(od => od.Product)
+                   .FirstOrDefault(od => od.Id == id);
+    }
+
+    public void Update(OrderDetail entity)
+    {
+        ArgumentNullException.ThrowIfNull(entity);
+        this.context.OrderDetails.Update(entity);
+        this.context.SaveChanges();
     }
 }

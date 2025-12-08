@@ -1,34 +1,45 @@
 ﻿namespace StoreDAL.Entities;
+
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 
 [Table("customer_orders")]
 public class CustomerOrder : BaseEntity
 {
     public CustomerOrder()
+        : base()
     {
     }
 
-    public CustomerOrder(int id, string operationTime, int userId, int orderStateId)
+    public CustomerOrder(int id, DateTime operationTime, int customerId, int orderStateId)
         : base(id)
     {
         this.OperationTime = operationTime;
-        this.UserId = userId;
+        this.CustomerId = customerId;
         this.OrderStateId = orderStateId;
     }
 
     [Column("customer_id")]
-    public int UserId { get; set; }
+    public int CustomerId { get; set; }
 
-    [Column("operation_time", TypeName = "varchar(50)")]
-    public string OperationTime { get; set; }
+    [ForeignKey("CustomerId")]
+    public User Customer { get; set; }
+
+    [Required]
+    [Column("operation_time")]
+    public DateTime OperationTime { get; set; }
 
     [Column("order_state_id")]
     public int OrderStateId { get; set; }
 
-    public User User { get; set; }
+    [ForeignKey("OrderStateId")]
+    public OrderState OrderState { get; set; }
 
-    public OrderState State { get; set; }
+    public virtual IList<OrderDetail> CustomerOrderDetails { get; set; } = new List<OrderDetail>();
 
-    public virtual IList<OrderDetail> Details { get; set; }
+    [NotMapped]
+    public decimal TotalAmount => this.CustomerOrderDetails.Sum(detail => detail.Price * detail.ProductAmount);
 }

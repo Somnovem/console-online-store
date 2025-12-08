@@ -1,5 +1,7 @@
 ﻿namespace StoreDAL.Entities;
+
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 [Table("user_roles")]
@@ -12,11 +14,13 @@ public class UserRole : BaseEntity
     public UserRole(int id, string roleName)
         : base(id)
     {
-        this.RoleName = roleName;
+        this.UserRoleName = roleName;
     }
 
-    [Column("user_role_name", TypeName = "varchar(30)")]
-    public string RoleName { get; set; }
+    [Required]
+    [Column("user_role_name")]
 
-    public virtual IList<User> User { get; set; }
+    public string UserRoleName { get; set; }
+
+    public virtual IList<User> Users { get; set; } = new List<User>();
 }

@@ -1,23 +1,25 @@
 ﻿namespace StoreDAL.Data.InitDataFactory;
-using Entities;
 
-public abstract class AbstractDataFactory
+using StoreDAL.Entities;
+using StoreDAL.Data;
+
+public interface IDataFactory
 {
-    public abstract Category[] GetCategoryData();
+    Category[] GetCategoryData();
 
-    public abstract CustomerOrder[] GetCustomerOrderData();
+    CustomerOrder[] GetCustomerOrderData();
 
-    public abstract Manufacturer[] GetManufacturerData();
+    Manufacturer[] GetManufacturerData();
 
-    public abstract OrderDetail[] GetOrderDetailData();
+    OrderDetail[] GetOrderDetailData();
 
-    public abstract OrderState[] GetOrderStateData();
+    OrderState[] GetOrderStateData();
 
-    public abstract Product[] GetProductData();
+    Product[] GetProductData();
 
-    public abstract ProductTitle[] GetProductTitleData();
+    ProductTitle[] GetProductTitleData();
 
-    public abstract User[] GetUserData();
+    User[] GetUserData();
 
-    public abstract UserRole[] GetUserRoleData();
+    UserRole[] GetUserRoleData();
 }

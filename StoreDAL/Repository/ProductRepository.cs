@@ -1,89 +1,74 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿namespace StoreDAL.Repository;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using StoreDAL.Data;
 using StoreDAL.Entities;
 using StoreDAL.Interfaces;
 
-namespace StoreDAL.Repository
+public class ProductRepository : AbstractRepository, IProductRepository
 {
-    public class ProductRepository : AbstractRepository, IProductRepository
+    public ProductRepository(StoreDbContext context)
+        : base(context)
     {
-        private readonly DbSet<Product> dbSet;
+    }
 
-        public ProductRepository(StoreDbContext? context)
-            : base(context)
+    public void Add(Product entity)
+    {
+        ArgumentNullException.ThrowIfNull(entity);
+        this.context.Products.Add(entity);
+        this.context.SaveChanges();
+    }
+
+    public void Delete(Product entity)
+    {
+        ArgumentNullException.ThrowIfNull(entity);
+        this.context.Products.Remove(entity);
+        this.context.SaveChanges();
+    }
+
+    public void DeleteById(int id)
+    {
+        var productToDelete = this.context.Products.Find(id);
+        if (productToDelete != null)
         {
-            ArgumentNullException.ThrowIfNull(context);
-            this.dbSet = context.Set<Product>();
-        }
-
-        public void Add(Product? entity)
-        {
-            ArgumentNullException.ThrowIfNull(entity);
-
-            this.dbSet.Add(entity);
+            this.context.Products.Remove(productToDelete);
             this.context.SaveChanges();
         }
+    }
 
-        public void Delete(Product? entity)
-        {
-            ArgumentNullException.ThrowIfNull(entity);
+    public IEnumerable<Product> GetAll()
+    {
+        return this.context.Products
+                   .Include(p => p.ProductTitle)
+                   .Include(p => p.Manufacturer)
+                   .ToList();
+    }
 
-            this.dbSet.Remove(entity);
-            this.context.SaveChanges();
-        }
+    public IEnumerable<Product> GetAll(int pageNumber, int rowCount)
+    {
+        return this.context.Products
+                   .Include(p => p.ProductTitle)
+                   .Include(p => p.Manufacturer)
+                   .Skip((pageNumber - 1) * rowCount)
+                   .Take(rowCount)
+                   .ToList();
+    }
 
-        public void DeleteById(int id)
-        {
-            var entity = this.dbSet.Find(id);
-            if (entity != null)
-            {
-                this.dbSet.Remove(entity);
-                this.context.SaveChanges();
-            }
-        }
+    public Product GetById(int id)
+    {
+        return this.context.Products
+                   .Include(p => p.ProductTitle)
+                   .Include(p => p.Manufacturer)
+                   .FirstOrDefault(p => p.Id == id);
+    }
 
-        public IEnumerable<Product> GetAll()
-        {
-            return this.dbSet.ToList();
-        }
-
-        public IEnumerable<Product> GetAll(int pageNumber, int rowCount)
-        {
-            if (pageNumber < 1)
-            {
-                pageNumber = 1;
-            }
-
-            if (rowCount < 1)
-            {
-                rowCount = 10;
-            }
-
-            return this.dbSet
-                .OrderBy(p => p.Id)
-                .Skip((pageNumber - 1) * rowCount)
-                .Take(rowCount)
-                .ToList();
-        }
-
-        public Product GetById(int id)
-        {
-            return this.dbSet
-                .Include(p => p.Manufacturer)
-                .Include(p => p.Title)
-                .FirstOrDefault(p => p.Id == id);
-        }
-
-        public void Update(Product? entity)
-        {
-            ArgumentNullException.ThrowIfNull(entity);
-
-            var existing = this.dbSet.Find(entity.Id);
-            if (existing != null)
-            {
-                this.context.Entry(existing).CurrentValues.SetValues(entity);
-                this.context.SaveChanges();
-            }
-        }
+    public void Update(Product entity)
+    {
+        ArgumentNullException.ThrowIfNull(entity);
+        this.context.Products.Update(entity);
+        this.context.SaveChanges();
     }
 }

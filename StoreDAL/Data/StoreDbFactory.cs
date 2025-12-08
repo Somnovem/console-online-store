@@ -6,9 +6,9 @@ namespace StoreDAL.Data
 {
     public class StoreDbFactory
     {
-        private readonly AbstractDataFactory factory;
+        private readonly IDataFactory factory;
 
-        public StoreDbFactory(AbstractDataFactory factory)
+        public StoreDbFactory(IDataFactory factory)
         {
               this.factory = factory;
         }
