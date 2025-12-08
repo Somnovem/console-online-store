@@ -1,49 +1,98 @@
-﻿namespace StoreBLL.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using StoreBLL.Interfaces;
-using StoreBLL.Models;
-using StoreDAL.Data;
-using StoreDAL.Entities;
-using StoreDAL.Interfaces;
-using StoreDAL.Repository;
-
-public class OrderStateService : ICrud
+﻿namespace StoreBLL.Services
 {
-    private readonly IOrderStateRepository repository;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using StoreBLL.Interfaces;
+    using StoreBLL.Models;
+    using StoreDAL.Entities;
+    using StoreDAL.Interfaces;
 
-    public OrderStateService(StoreDbContext context)
+    /// <summary>
+    /// Provides CRUD operations for managing order states.
+    /// Implements <see cref="ICrud"/> interface.
+    /// </summary>
+    public class OrderStateService : ICrud
     {
-        this.repository = new OrderStateRepository(context);
-    }
+        private readonly IOrderStateRepository repository;
 
-    public void Add(AbstractModel model)
-    {
-        var x = (OrderStateModel)model;
-        this.repository.Add(new OrderState(x.Id, x.StateName));
-    }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OrderStateService"/> class.
+        /// </summary>
+        /// <param name="repository">The repository for accessing order state data.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="repository"/> is null.</exception>
+        public OrderStateService(IOrderStateRepository repository)
+        {
+            this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
+        }
 
-    public void Delete(int modelId)
-    {
-        this.repository.DeleteById(modelId);
-    }
+        /// <inheritdoc/>
+        public void Add(AbstractModel model)
+        {
+            if (model is not OrderStateModel orderStateModel)
+            {
+                throw new ArgumentException("Model is not an OrderStateModel.", nameof(model));
+            }
 
-    public IEnumerable<AbstractModel> GetAll()
-    {
-        return this.repository.GetAll().Select(x => new UserRoleModel(x.Id, x.StateName));
-    }
+            var entity = MapToEntity(new OrderStateModel(0, orderStateModel.StateName));
+            this.repository.Add(entity);
+        }
 
-    public AbstractModel GetById(int id)
-    {
-        var res = this.repository.GetById(id);
-        return new OrderStateModel(res.Id, res.StateName);
-    }
+        /// <inheritdoc/>
+        public void Delete(int modelId)
+        {
+            this.repository.DeleteById(modelId);
+        }
 
-    public void Update(AbstractModel model)
-    {
-        throw new NotImplementedException();
+        /// <inheritdoc/>
+        public IEnumerable<AbstractModel> GetAll()
+        {
+            return this.repository
+                .GetAll()
+                .Select(MapToModel)
+                .OfType<AbstractModel>()
+                .ToList();
+        }
+
+        /// <inheritdoc/>
+        public AbstractModel GetById(int id)
+        {
+            var entity = this.repository.GetById(id)
+                ?? throw new InvalidOperationException($"Order state with ID {id} not found.");
+
+            return MapToModel(entity);
+        }
+
+        /// <inheritdoc/>
+        public void Update(AbstractModel model)
+        {
+            if (model is not OrderStateModel orderStateModel)
+            {
+                throw new ArgumentException("Model is not an OrderStateModel.", nameof(model));
+            }
+
+            var entity = MapToEntity(orderStateModel);
+            this.repository.Update(entity);
+        }
+
+        /// <summary>
+        /// Maps an <see cref="OrderState"/> entity to an <see cref="OrderStateModel"/>.
+        /// </summary>
+        /// <param name="entity">The entity to map.</param>
+        /// <returns>The mapped <see cref="OrderStateModel"/>.</returns>
+        private static OrderStateModel MapToModel(OrderState entity)
+        {
+            return new OrderStateModel(entity.Id, entity.StateName);
+        }
+
+        /// <summary>
+        /// Maps an <see cref="OrderStateModel"/> to an <see cref="OrderState"/> entity.
+        /// </summary>
+        /// <param name="model">The model to map.</param>
+        /// <returns>The mapped <see cref="OrderState"/> entity.</returns>
+        private static OrderState MapToEntity(OrderStateModel model)
+        {
+            return new OrderState(model.Id, model.StateName);
+        }
     }
 }

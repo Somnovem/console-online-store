@@ -1,49 +1,95 @@
-﻿namespace StoreBLL.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using StoreBLL.Interfaces;
-using StoreBLL.Models;
-using StoreDAL.Data;
-using StoreDAL.Entities;
-using StoreDAL.Interfaces;
-using StoreDAL.Repository;
-
-public class UserRoleService : ICrud
+﻿namespace StoreBLL.Services
 {
-    private readonly IUserRoleRepository repository;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using StoreBLL.Interfaces;
+    using StoreBLL.Models;
+    using StoreDAL.Entities;
+    using StoreDAL.Interfaces;
 
-    public UserRoleService(StoreDbContext context)
+    /// <summary>
+    /// Service class for managing user roles.
+    /// Implements CRUD operations via <see cref="ICrud"/>.
+    /// </summary>
+    public class UserRoleService : ICrud
     {
-        this.repository = new UserRoleRepository(context);
-    }
+        private readonly IUserRoleRepository repository;
 
-    public void Add(AbstractModel model)
-    {
-        var x = (UserRoleModel)model;
-        this.repository.Add(new UserRole(x.Id, x.RoleName));
-    }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UserRoleService"/> class.
+        /// </summary>
+        /// <param name="repository">Repository for accessing user roles.</param>
+        /// <exception cref="ArgumentNullException">Thrown if repository is null.</exception>
+        public UserRoleService(IUserRoleRepository repository)
+        {
+            this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
+        }
 
-    public void Delete(int modelId)
-    {
-        this.repository.DeleteById(modelId);
-    }
+        /// <inheritdoc/>
+        public void Add(AbstractModel model)
+        {
+            if (model is not UserRoleModel userRoleModel)
+            {
+                throw new ArgumentException("Model is not a UserRoleModel.", nameof(model));
+            }
 
-    public IEnumerable<AbstractModel> GetAll()
-    {
-        return this.repository.GetAll().Select(x => new UserRoleModel(x.Id, x.RoleName));
-    }
+            var entity = MapToEntity(userRoleModel);
+            this.repository.Add(entity);
+        }
 
-    public AbstractModel GetById(int id)
-    {
-        var res = this.repository.GetById(id);
-        return new UserRoleModel(res.Id, res.RoleName);
-    }
+        /// <inheritdoc/>
+        public void Delete(int modelId)
+        {
+            this.repository.DeleteById(modelId);
+        }
 
-    public void Update(AbstractModel model)
-    {
-        throw new NotImplementedException();
+        /// <inheritdoc/>
+        public IEnumerable<AbstractModel> GetAll()
+        {
+            return this.repository.GetAll()
+                .Select(MapToModel)
+                .Where(m => m != null)
+                .Cast<AbstractModel>()
+                .ToList();
+        }
+
+        /// <inheritdoc/>
+        public AbstractModel GetById(int id)
+        {
+            var entity = this.repository.GetById(id)
+                ?? throw new InvalidOperationException($"UserRole with ID {id} not found.");
+
+            return MapToModel(entity) !;
+        }
+
+        /// <inheritdoc/>
+        public void Update(AbstractModel model)
+        {
+            if (model is not UserRoleModel userRoleModel)
+            {
+                throw new ArgumentException("Model is not a UserRoleModel.", nameof(model));
+            }
+
+            var entity = MapToEntity(userRoleModel);
+            this.repository.Update(entity);
+        }
+
+        /// <summary>
+        /// Maps a <see cref="UserRole"/> entity to a <see cref="UserRoleModel"/>.
+        /// </summary>
+        private static UserRoleModel? MapToModel(UserRole? entity)
+        {
+            if (entity == null) return null;
+            return new UserRoleModel(entity.Id, entity.UserRoleName);
+        }
+
+        /// <summary>
+        /// Maps a <see cref="UserRoleModel"/> to a <see cref="UserRole"/> entity.
+        /// </summary>
+        private static UserRole MapToEntity(UserRoleModel model)
+        {
+            return new UserRole(model.Id, model.UserRoleName);
+        }
     }
 }

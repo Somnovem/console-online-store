@@ -1,97 +1,110 @@
-﻿namespace StoreBLL.Services;
-
-using StoreDAL.Entities;
-using StoreDAL.Repository;
-using System.Collections.Generic;
-using Interfaces;
-using Models;
-using StoreDAL.Data;
-using StoreDAL.Interfaces;
-
-/// <summary>
-/// Service for managing products, including CRUD operations.
-/// </summary>
-public class ProductService : ICrud
+﻿namespace StoreBLL.Services
 {
-    private readonly IProductRepository repository;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using StoreBLL.Interfaces;
+    using StoreBLL.Models;
+    using StoreDAL.Entities;
+    using StoreDAL.Interfaces;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="ProductService"/> class with the given database context.
+    /// Provides CRUD operations for managing products.
+    /// Implements <see cref="ICrud"/> interface.
     /// </summary>
-    /// <param name="context">The database context used to access product data.</param>
-    public ProductService(StoreDbContext context)
+    public class ProductService : ICrud
     {
-        this.repository = new ProductRepository(context);
-    }
+        private readonly IProductRepository productRepository;
 
-    /// <summary>
-    /// Adds a new product to the repository.
-    /// </summary>
-    /// <param name="model">The <see cref="ProductModel"/> containing product information.</param>
-    public void Add(AbstractModel model)
-    {
-        var productModel = (ProductModel)model;
-        this.repository.Add(new Product(
-            productModel.Id,
-            productModel.TitleId,
-            productModel.ManufacturerId,
-            productModel.Description,
-            productModel.UnitPrice));
-    }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProductService"/> class.
+        /// </summary>
+        /// <param name="productRepository">The repository for accessing product data.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="productRepository"/> is null.</exception>
+        public ProductService(IProductRepository productRepository)
+        {
+            this.productRepository = productRepository ?? throw new ArgumentNullException(nameof(productRepository));
+        }
 
-    /// <summary>
-    /// Deletes a product from the repository by ID.
-    /// </summary>
-    /// <param name="modelId">The ID of the product to delete.</param>
-    public void Delete(int modelId)
-    {
-        var entity = this.repository.GetById(modelId);
-        this.repository.Delete(entity);
-    }
+        /// <inheritdoc/>
+        public void Add(AbstractModel model)
+        {
+            if (model is not ProductModel productModel)
+            {
+                throw new ArgumentException("Model is not a ProductModel.", nameof(model));
+            }
 
-    /// <summary>
-    /// Retrieves all products from the repository.
-    /// </summary>
-    /// <returns>A collection of <see cref="ProductModel"/> instances.</returns>
-    public IEnumerable<AbstractModel> GetAll()
-    {
-        return this.repository.GetAll().Select(p => new ProductModel(
-            p.Id,
-            p.TitleId,
-            p.ManufacturerId,
-            p.Description,
-            p.UnitPrice));
-    }
+            var entity = MapToEntity(productModel) ?? throw new InvalidOperationException("Mapping to entity failed.");
+            this.productRepository.Add(entity);
+        }
 
-    /// <summary>
-    /// Retrieves a product by ID.
-    /// </summary>
-    /// <param name="id">The ID of the product.</param>
-    /// <returns>The <see cref="ProductModel"/> corresponding to the ID.</returns>
-    public AbstractModel GetById(int id)
-    {
-        var p = this.repository.GetById(id);
-        return new DetailedProductModel(
-            p.Id,
-            new ProductTitleModel(p.Title.Id, p.Title.Title),
-            new ManufacturerModel(p.Manufacturer.Id, p.Manufacturer.Name),
-            p.Description,
-            p.UnitPrice);
-    }
+        /// <inheritdoc/>
+        public void Delete(int modelId)
+        {
+            this.productRepository.DeleteById(modelId);
+        }
 
-    /// <summary>
-    /// Updates a product's information in the repository.
-    /// </summary>
-    /// <param name="model">The <see cref="ProductModel"/> containing updated product information.</param>
-    public void Update(AbstractModel model)
-    {
-        ProductModel productModel = (ProductModel)model;
+        /// <inheritdoc/>
+        public IEnumerable<AbstractModel> GetAll()
+        {
+            return this.productRepository
+                .GetAll()
+                .Select(MapToModel)
+                .Where(m => m != null)
+                .Cast<AbstractModel>()
+                .ToList();
+        }
 
-        this.repository.Update(new Product(
-            productModel.Id,
-            productModel.TitleId,
-            productModel.ManufacturerId,
-            productModel.Description,
-            productModel.UnitPrice));
+        /// <inheritdoc/>
+        public AbstractModel GetById(int id)
+        {
+            var entity = this.productRepository.GetById(id)
+                ?? throw new InvalidOperationException($"Product with ID {id} not found.");
+
+            return MapToModel(entity) !;
+        }
+
+        /// <inheritdoc/>
+        public void Update(AbstractModel model)
+        {
+            if (model is not ProductModel productModel)
+            {
+                throw new ArgumentException("Model is not a ProductModel.", nameof(model));
+            }
+
+            var entity = MapToEntity(productModel) ?? throw new InvalidOperationException("Mapping to entity failed.");
+            this.productRepository.Update(entity);
+        }
+
+        /// <summary>
+        /// Maps a <see cref="Product"/> entity to a <see cref="ProductModel"/>.
+        /// </summary>
+        private static ProductModel? MapToModel(Product? entity)
+        {
+            if (entity == null) return null;
+
+            return new ProductModel(
+                entity.Id,
+                entity.ProductTitleId,
+                entity.ManufacturerId,
+                entity.UnitPrice,
+                entity.AvailableQuantity);
+        }
+
+        /// <summary>
+        /// Maps a <see cref="ProductModel"/> to a <see cref="Product"/> entity.
+        /// </summary>
+        private static Product? MapToEntity(ProductModel? model)
+        {
+            if (model == null) return null;
+
+            return new Product(
+                model.Id,
+                model.ProductTitleId,
+                model.ManufacturerId,
+                string.Empty, // Assuming the Product entity requires a Title string which is set elsewhere
+                model.UnitPrice,
+                model.AvailableQuantity);
+        }
     }
 }

@@ -1,21 +1,44 @@
-﻿namespace StoreBLL.Models;
-using StoreDAL.Entities;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Security.Cryptography.X509Certificates;
-
-public class ManufacturerModel : AbstractModel
+﻿namespace StoreBLL.Models
 {
-    public ManufacturerModel(int id, string name)
-        : base(id)
+    /// <summary>
+    /// Represents a manufacturer in the business logic layer.
+    /// </summary>
+    public class ManufacturerModel : AbstractModel
     {
-        this.Name = name;
-    }
+        /// <summary>
+        /// Creates a new instance of <see cref="ManufacturerModel"/> with default values.
+        /// The ID is set to 0 and the name is set to an empty string.
+        /// This is useful for creating a blank or placeholder manufacturer.
+        /// </summary>
+        public ManufacturerModel()
+            : base(0)
+        {
+            this.ManufacturerName = string.Empty;
+        }
 
-    public string Name { get; set; }
+        /// <summary>
+        /// Creates a new instance of <see cref="ManufacturerModel"/> with a specified ID and name.
+        /// </summary>
+        /// <param name="id">The unique identifier of the manufacturer.</param>
+        /// <param name="manufacturerName">The name of the manufacturer.</param>
+        public ManufacturerModel(int id, string manufacturerName)
+            : base(id)
+        {
+            this.ManufacturerName = manufacturerName;
+        }
 
-    public override string ToString()
-    {
-        throw new NotImplementedException();
+        /// <summary>
+        /// Gets or sets the name of the manufacturer.
+        /// </summary>
+        public string ManufacturerName { get; set; }
+
+        /// <summary>
+        /// Returns the name of the manufacturer as the string representation of the object.
+        /// </summary>
+        /// <returns>A string containing the manufacturer's name.</returns>
+        public override string ToString()
+        {
+            return this.ManufacturerName;
+        }
     }
 }

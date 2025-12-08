@@ -1,20 +1,43 @@
-﻿namespace StoreBLL.Models;
-using System;
-using System.Collections.Generic;
-
-public class UserRoleModel : AbstractModel
+﻿namespace StoreBLL.Models
 {
-    public UserRoleModel(int id, string roleName)
-        : base(id)
+    /// <summary>
+    /// Represents a user role, including its unique ID and name.
+    /// </summary>
+    public class UserRoleModel : AbstractModel
     {
-        this.Id = id;
-        this.RoleName = roleName;
-    }
+        /// <summary>
+        /// Creates a new instance of <see cref="UserRoleModel"/> with a specified ID and role name.
+        /// </summary>
+        /// <param name="id">The unique identifier of the user role.</param>
+        /// <param name="userRoleName">The name of the user role.</param>
+        public UserRoleModel(int id, string userRoleName)
+            : base(id)
+        {
+            this.UserRoleName = userRoleName;
+        }
 
-    public string RoleName { get; set; }
+        /// <summary>
+        /// Creates a new instance of <see cref="UserRoleModel"/> with default values.
+        /// The role name is initialized to an empty string to avoid null reference warnings.
+        /// </summary>
+        public UserRoleModel()
+            : base(0)
+        {
+            this.UserRoleName = string.Empty;
+        }
 
-    public override string ToString()
-    {
-        return $"Id:{this.Id} {this.RoleName}";
+        /// <summary>
+        /// Gets or sets the name of the user role.
+        /// </summary>
+        public string UserRoleName { get; set; }
+
+        /// <summary>
+        /// Returns a string representation of the user role.
+        /// </summary>
+        /// <returns>A string containing the role's ID and name.</returns>
+        public override string ToString()
+        {
+            return $"Id: {this.Id}, RoleName: {this.UserRoleName}";
+        }
     }
 }

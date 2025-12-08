@@ -1,43 +1,119 @@
-﻿namespace StoreBLL.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using StoreBLL.Interfaces;
-using StoreBLL.Models;
-using StoreDAL.Data;
-using StoreDAL.Entities;
-using StoreDAL.Interfaces;
-
-public class OrderDetailService : ICrud
+﻿namespace StoreBLL.Services
 {
-    public OrderDetailService(StoreDbContext context)
-    {
-    }
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using StoreBLL.Interfaces;
+    using StoreBLL.Models;
+    using StoreDAL.Entities;
+    using StoreDAL.Interfaces;
 
-    public void Add(AbstractModel model)
+    /// <summary>
+    /// Provides CRUD operations for managing order details.
+    /// Implements <see cref="ICrud"/> interface.
+    /// </summary>
+    public class OrderDetailService : ICrud
     {
-        throw new NotImplementedException();
-    }
+        private readonly IOrderDetailRepository orderDetailRepository;
 
-    public void Delete(int modelId)
-    {
-        throw new NotImplementedException();
-    }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OrderDetailService"/> class.
+        /// </summary>
+        /// <param name="orderDetailRepository">The repository for accessing order detail data.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="orderDetailRepository"/> is null.</exception>
+        public OrderDetailService(IOrderDetailRepository orderDetailRepository)
+        {
+            this.orderDetailRepository = orderDetailRepository ?? throw new ArgumentNullException(nameof(orderDetailRepository));
+        }
 
-    public IEnumerable<AbstractModel> GetAll()
-    {
-        throw new NotImplementedException();
-    }
+        /// <inheritdoc/>
+        public void Add(AbstractModel model)
+        {
+            if (model is not OrderDetailModel orderDetailModel)
+            {
+                throw new ArgumentException("Model is not an OrderDetailModel.", nameof(model));
+            }
 
-    public AbstractModel GetById(int id)
-    {
-        throw new NotImplementedException();
-    }
+            var orderDetailEntity = MapToEntity(orderDetailModel);
+            this.orderDetailRepository.Add(orderDetailEntity);
+        }
 
-    public void Update(AbstractModel model)
-    {
-        throw new NotImplementedException();
+        /// <inheritdoc/>
+        public void Delete(int modelId)
+        {
+            this.orderDetailRepository.DeleteById(modelId);
+        }
+
+        /// <inheritdoc/>
+        public IEnumerable<AbstractModel> GetAll()
+        {
+            return this.orderDetailRepository.GetAll()
+                .Select(MapToModel)
+                .Cast<AbstractModel>()
+                .ToList();
+        }
+
+        /// <inheritdoc/>
+        public AbstractModel GetById(int id)
+        {
+            var entity = this.orderDetailRepository.GetById(id)
+                ?? throw new InvalidOperationException($"Order detail with ID {id} not found.");
+
+            return MapToModel(entity);
+        }
+
+        /// <inheritdoc/>
+        public void Update(AbstractModel model)
+        {
+            if (model is not OrderDetailModel orderDetailModel)
+            {
+                throw new ArgumentException("Model is not an OrderDetailModel.", nameof(model));
+            }
+
+            var orderDetailEntity = MapToEntity(orderDetailModel);
+            this.orderDetailRepository.Update(orderDetailEntity);
+        }
+
+        /// <summary>
+        /// Converts an <see cref="OrderDetail"/> entity to an <see cref="OrderDetailModel"/>.
+        /// </summary>
+        /// <param name="entity">The entity to map.</param>
+        /// <returns>The mapped <see cref="OrderDetailModel"/>.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="entity"/> is null.</exception>
+        private static OrderDetailModel MapToModel(OrderDetail? entity)
+        {
+            if (entity == null)
+            {
+                throw new ArgumentNullException(nameof(entity));
+            }
+
+            return new OrderDetailModel(
+                entity.Id,
+                entity.CustomerOrderId,
+                entity.ProductId,
+                entity.ProductAmount,
+                entity.Price);
+        }
+
+        /// <summary>
+        /// Converts an <see cref="OrderDetailModel"/> to an <see cref="OrderDetail"/> entity.
+        /// </summary>
+        /// <param name="model">The model to map.</param>
+        /// <returns>The mapped <see cref="OrderDetail"/> entity.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="model"/> is null.</exception>
+        private static OrderDetail MapToEntity(OrderDetailModel? model)
+        {
+            if (model == null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
+            return new OrderDetail(
+                model.Id,
+                model.CustomerOrderId,
+                model.ProductId,
+                model.Price,
+                model.ProductAmount);
+        }
     }
 }

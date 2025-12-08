@@ -1,174 +1,116 @@
-﻿namespace StoreBLL.Services;
-
-using ConsoleApp.Controllers;
-using Exceptions;
-using Helpers;
-using StoreDAL.Repository;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Interfaces;
-using Models;
-using StoreDAL.Data;
-using StoreDAL.Entities;
-using StoreDAL.Interfaces;
-
-/// <summary>
-/// Service for managing users, including CRUD operations and secure password handling.
-/// </summary>
-public class UserService : ICrud
+﻿namespace StoreBLL.Services
 {
-    private readonly IUserRepository repository;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using StoreBLL.Interfaces;
+    using StoreBLL.Models;
+    using StoreDAL.Entities;
+    using StoreDAL.Interfaces;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="UserService"/> class with the given database context.
+    /// Service class for managing users. Implements CRUD operations via <see cref="ICrud"/>.
     /// </summary>
-    /// <param name="context">The database context used to access user data.</param>
-    public UserService(StoreDbContext context)
+    public class UserService : ICrud
     {
-        this.repository = new UserRepository(context);
-    }
+        private readonly IUserRepository repository;
 
-    /// <summary>
-    /// Adds a new user to the repository with a securely hashed password.
-    /// </summary>
-    /// <param name="model">The <see cref="UserModel"/> containing user information.</param>
-    public void Add(AbstractModel model)
-    {
-        UserModel userModel = (UserModel)model;
-        ArgumentNullException.ThrowIfNull(userModel.Password);
-
-        userModel.Password = PasswordHelper.HashPassword(userModel.Password);
-
-        this.repository.Add(new User(
-            userModel.Id,
-            userModel.Name,
-            userModel.LastName,
-            userModel.Login,
-            userModel.Password,
-            userModel.RoleId));
-    }
-
-    /// <summary>
-    /// Deletes a user from the repository by ID.
-    /// </summary>
-    /// <param name="modelId">The ID of the user to delete.</param>
-    public void Delete(int modelId)
-    {
-        var entity = this.repository.GetById(modelId);
-        this.repository.Delete(entity);
-    }
-
-    /// <summary>
-    /// Retrieves all users from the repository.
-    /// Note: Passwords are not returned for security reasons.
-    /// </summary>
-    /// <returns>A collection of <see cref="UserModel"/> without passwords.</returns>
-    public IEnumerable<AbstractModel> GetAll()
-    {
-        return this.repository.GetAll().Select(u => new UserModel(
-            u.Id,
-            u.Name,
-            u.LastName,
-            u.Login,
-            password: null,
-            u.RoleId));
-    }
-
-    /// <summary>
-    /// Retrieves a user by ID.
-    /// Note: Password is not returned for security reasons.
-    /// </summary>
-    /// <param name="id">The ID of the user.</param>
-    /// <returns>The <see cref="UserModel"/> corresponding to the ID.</returns>
-    public AbstractModel GetById(int id)
-    {
-        var u = this.repository.GetById(id);
-        return new UserModel(
-            u.Id,
-            u.Name,
-            u.LastName,
-            u.Login,
-            password: null,
-            u.RoleId);
-    }
-
-    /// <summary>
-    /// Updates a user's information in the repository.
-    /// If a new password is provided, it is securely hashed before storage.
-    /// </summary>
-    /// <param name="model">The <see cref="UserModel"/> containing updated user information.</param>
-    public void Update(AbstractModel model)
-    {
-        UserModel userModel = (UserModel)model;
-
-        if (!string.IsNullOrEmpty(userModel.Password))
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UserService"/> class.
+        /// </summary>
+        /// <param name="repository">Repository for accessing users.</param>
+        /// <exception cref="ArgumentNullException">Thrown if repository is null.</exception>
+        public UserService(IUserRepository repository)
         {
-            userModel.Password = PasswordHelper.HashPassword(userModel.Password);
+            this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
         }
 
-        this.repository.Update(new User(
-            userModel.Id,
-            userModel.Name,
-            userModel.LastName,
-            userModel.Login,
-            userModel.Password!,
-            userModel.RoleId));
-    }
-
-    /// <summary>
-    /// A method that logs in a user.
-    /// </summary>
-    /// <param name="login">User's login.</param>
-    /// <param name="password">User's password.</param>
-    /// <returns>Tuple with id and userRole.</returns>
-    /// <exception cref="UserNotFound">Threw if user was not found in the system.</exception>
-    public (int, UserRoles) Login(string login, string password)
-    {
-        User? user = this.repository.GetUserByLogin(login);
-
-        if (user == null || !PasswordHelper.VerifyPassword(password, user.Password))
+        /// <summary>
+        /// Attempts to log in a user with the given login and password.
+        /// </summary>
+        public UserModel? Login(string login, string password)
         {
-            throw new UserNotFound("Invalid login or password");
+            var entity = this.repository.GetAll().FirstOrDefault(u => u.Login == login);
+            if (entity != null && entity.Password == password)
+            {
+                return MapToModel(entity);
+            }
+            return null;
         }
 
-        return new ValueTuple<int, UserRoles>(user.Id, StringRoleToEnum(user.Role.RoleName));
-    }
-
-    /// <summary>
-    /// Generates a new id for a new record.
-    /// </summary>
-    /// <returns>Returns int which is a new id.</returns>
-    public int GenerateNewId()
-    {
-        return this.GetAll().Last().Id + 1;
-    }
-
-    /// <summary>
-    /// Checks if a user with such login already exists.
-    /// </summary>
-    /// <param name="login">Login of a user.</param>
-    /// <returns>True if login exists - otherwise false.</returns>
-    public bool CheckIfLoginValid(string login)
-    {
-        User? user = this.repository.GetUserByLogin(login);
-        return user == null;
-    }
-
-    private static UserRoles StringRoleToEnum(string roleName)
-    {
-        UserRoles result = UserRoles.Guest;
-
-        switch (roleName)
+        /// <inheritdoc/>
+        public void Add(AbstractModel model)
         {
-            case "Admin":
-                result = UserRoles.Administrator;
-                break;
-            case "Registered":
-                result = UserRoles.RegistredCustomer;
-                break;
+            if (model is not UserModel userModel)
+                throw new ArgumentException("Model is not a UserModel.", nameof(model));
+
+            var entity = MapToEntity(userModel);
+            this.repository.Add(entity);
         }
 
-        return result;
+        /// <inheritdoc/>
+        public void Delete(int modelId)
+        {
+            this.repository.DeleteById(modelId);
+        }
+
+        /// <inheritdoc/>
+        public IEnumerable<AbstractModel> GetAll()
+        {
+            return this.repository
+                .GetAll()
+                .Select(MapToModel)
+                .Where(m => m != null)
+                .Cast<AbstractModel>()
+                .ToList();
+        }
+
+        /// <inheritdoc/>
+        public AbstractModel GetById(int id)
+        {
+            var entity = this.repository.GetById(id)
+                ?? throw new InvalidOperationException($"User with ID {id} not found.");
+
+            return MapToModel(entity) !;
+        }
+
+        /// <inheritdoc/>
+        public void Update(AbstractModel model)
+        {
+            if (model is not UserModel userModel)
+                throw new ArgumentException("Model is not a UserModel.", nameof(model));
+
+            var entity = MapToEntity(userModel);
+            this.repository.Update(entity);
+        }
+
+        /// <summary>
+        /// Maps a <see cref="User"/> entity to a <see cref="UserModel"/>.
+        /// </summary>
+        private static UserModel MapToModel(User entity)
+        {
+            return new UserModel(
+                entity.Id,
+                entity.UserRoleId,
+                entity.FirstName,
+                entity.LastName,
+                entity.Login,
+                entity.Password,
+                entity.UserRole?.UserRoleName);
+        }
+
+        /// <summary>
+        /// Maps a <see cref="UserModel"/> to a <see cref="User"/> entity.
+        /// </summary>
+        private static User MapToEntity(UserModel model)
+        {
+            return new User(
+                model.Id,
+                model.FirstName,
+                model.LastName,
+                model.Login,
+                model.Password,
+                model.UserRoleId);
+        }
     }
 }
