@@ -1,13 +1,13 @@
 using ConsoleApp.MenuCore;
-using StoreDAL.Data;
 
 namespace ConsoleApp.MenuBuilder;
-public abstract class AbstractMenuCreator : IMenuCreator
-{
-    public abstract (ConsoleKey id, string caption, Action action)[] GetMenuItems(StoreDbContext context);
 
-    public Menu Create(StoreDbContext context)
+public abstract class AbstractMenuCreator
+{
+    public abstract (ConsoleKey id, string caption, Action action)[] GetMenuItems();
+
+    public Menu CreateMenu()
     {
-        return new Menu(this.GetMenuItems(context));
+        return new Menu(this.GetMenuItems());
     }
 }

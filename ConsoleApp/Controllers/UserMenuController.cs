@@ -1,92 +1,179 @@
-using ConsoleApp.Helpers;
-using ConsoleApp.MenuBuilder.Guest;
-using ConsoleApp.MenuBuilder.User;
-using ConsoleApp.MenuCore;
-using ConsoleMenu.Builder;
-using StoreBLL.Exceptions;
-using StoreBLL.Models;
-using StoreBLL.Services;
-using StoreDAL.Data;
-using StoreDAL.Data.InitDataFactory;
-
 namespace ConsoleApp.Controllers;
 
-public static class UserMenuController
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using ConsoleApp.Helpers;
+using StoreBLL.Services;
+using StoreBLL.Models;
+using ConsoleApp.MenuBuilder.Admin;
+using ConsoleApp.MenuBuilder.Guest;
+using ConsoleApp.MenuBuilder.User;
+
+public class UserMenuController
 {
-    private static readonly Dictionary<UserRoles, Menu> RolesToMenu;
-    private static int userId;
-    private static UserRoles userRole;
-    private static StoreDbContext context;
+    private readonly UserService userService;
+    private readonly AdminMainMenu adminMainMenu;
+    private readonly GuestMainMenu guestMainMenu;
+    private readonly UserMainMenu userMainMenu;
 
-    static UserMenuController()
+    private UserModel? currentUser;
+    private bool isExiting;
+
+    public UserMenuController(
+        UserService userService,
+        AdminMainMenu adminMainMenu,
+        GuestMainMenu guestMainMenu,
+        UserMainMenu userMainMenu)
     {
-        userId = 0;
-        userRole = UserRoles.Guest;
-        RolesToMenu = new Dictionary<UserRoles, Menu>();
-        var factory = new StoreDbFactory(new TestDataFactory());
-        context = factory.CreateContext();
-        RolesToMenu.Add(UserRoles.Guest, new GuestMainMenu().Create(context));
-        RolesToMenu.Add(UserRoles.RegistredCustomer, new UserMainMenu().Create(context));
-        RolesToMenu.Add(UserRoles.Administrator, new AdminMainMenu().Create(context));
+        this.userService = userService ?? throw new ArgumentNullException(nameof(userService));
+        this.adminMainMenu = adminMainMenu ?? throw new ArgumentNullException(nameof(adminMainMenu));
+        this.guestMainMenu = guestMainMenu ?? throw new ArgumentNullException(nameof(guestMainMenu));
+        this.userMainMenu = userMainMenu ?? throw new ArgumentNullException(nameof(userMainMenu));
     }
 
-    public static StoreDbContext Context
+    public void Start()
     {
-        get { return context; }
+        ClearConsole();
+
+        Console.WriteLine("Welcome to the Online Store Console App!");
+        Console.WriteLine("---------------------------------------");
+        this.Run();
     }
 
-    public static void Login()
+    public void Logout()
     {
-        var login = ConsoleManipulationHelper.GetString("Login: ");
-        var password = ConsoleManipulationHelper.GetString("Password: ");
+        Console.WriteLine("\nLogging out...");
+        this.currentUser = null;
+        Console.WriteLine("You have been logged out.");
+        InputHelper.PressAnyKeyToContinue();
+    }
 
-        UserService userService = new UserService(context);
+    public void Login()
+    {
+        Console.WriteLine("\n--- User Login ---");
+        Console.Write("Enter Username: ");
+
+        string username = Console.ReadLine() ?? string.Empty;
+        Console.Write("Enter Password: ");
+        string password = Console.ReadLine() ?? string.Empty;
+
         try
         {
-            (int, UserRoles) loggedInUser = userService.Login(login, password);
-            userId = loggedInUser.Item1;
-            userRole = loggedInUser.Item2;
+            this.currentUser = this.userService.Login(username, password);
 
-            Console.WriteLine("You were successfully logged in!");
-            RolesToMenu[userRole].Run();
+            if (this.currentUser != null)
+            {
+                Console.WriteLine($"\nWelcome, {this.currentUser.UserName}! You are logged in as {this.currentUser.RoleName}.");
+                InputHelper.PressAnyKeyToContinue();
+            }
+            else
+            {
+                Console.WriteLine("Invalid username or password. Please try again.");
+                InputHelper.PressAnyKeyToContinue();
+            }
         }
-        catch (UserNotFound e)
+        catch (Exception ex)
         {
-            Console.WriteLine(e.Message);
+            Console.WriteLine($"An error occurred during login: {ex.Message}");
+            InputHelper.PressAnyKeyToContinue();
         }
     }
 
-    public static void Register()
+    public void Exit()
     {
-        UserService userService = new UserService(context);
+        this.isExiting = true;
+    }
 
-        var userModel = new UserModel(userService.GenerateNewId())
+    private static void DisplayError(Exception ex)
+    {
+        ClearConsole();
+        Console.WriteLine("An error occurred while building the menu!");
+        Console.WriteLine($"Error Message: {ex.Message}");
+        Console.WriteLine($"Error Details: {ex.ToString()}");
+        InputHelper.PressAnyKeyToContinue();
+    }
+
+    private static void ClearConsole()
+    {
+        try
         {
-            RoleId = 2,
-        };
-
-        userModel.Login = ConsoleManipulationHelper.GetLogin(userService);
-        userModel.Password = ConsoleManipulationHelper.GetString("Password: ");
-        userModel.Name = ConsoleManipulationHelper.GetString("First Name: ");
-        userModel.LastName = ConsoleManipulationHelper.GetString("Last Name: ");
-
-        userService.Add(userModel);
-        Console.WriteLine("You were successfully registered!");
-
-        userId = userModel.Id;
-        userRole = UserRoles.RegistredCustomer;
-        RolesToMenu[userRole].Run();
+            Console.Clear();
+        }
+        catch (System.IO.IOException)
+        {
+            Console.WriteLine();
+        }
     }
 
-    public static void Logout()
+    private void Run()
     {
-        userId = 0;
-        userRole = UserRoles.Guest;
-        RolesToMenu[userRole].Run();
+        while (!this.isExiting)
+        {
+            try
+            {
+                ClearConsole();
+                var menuItemsList = this.GetMenuItemsForCurrentUser();
+
+                menuItemsList.Add((ConsoleKey.Escape, "Or press <Esc> to return", (Action)this.Exit));
+                var menuItemsArray = menuItemsList.ToArray();
+
+                foreach (var item in menuItemsArray.Where(i => i.action != null))
+                {
+                    Console.WriteLine($"<{item.id}>:  {item.caption}");
+                }
+
+                ConsoleKeyInfo res = Console.ReadKey(true);
+                var selectedItem = menuItemsArray.FirstOrDefault(item => item.id == res.Key);
+
+                selectedItem.action?.Invoke();
+            }
+            catch (Exception ex)
+            {
+                DisplayError(ex);
+            }
+        }
     }
 
-    public static void Start()
+    private List<(ConsoleKey id, string caption, Action action)> GetMenuItemsForCurrentUser()
     {
-        RolesToMenu[userRole].Run();
+        List<(ConsoleKey id, string caption, Action action)> menuItemsList;
+        string? userRole = this.currentUser?.RoleName;
+
+        switch (userRole)
+        {
+            case "Admin":
+                menuItemsList = this.adminMainMenu.GetMenuItems().ToList();
+                var adminLogoutItem = menuItemsList.FirstOrDefault(item => item.id == ConsoleKey.F1);
+                if (adminLogoutItem.id != default)
+                {
+                    menuItemsList.Remove(adminLogoutItem);
+                    menuItemsList.Insert(0, (adminLogoutItem.id, "Logout", (Action)this.Logout));
+                }
+
+                break;
+            case "Registered":
+                menuItemsList = this.userMainMenu.GetMenuItems().ToList();
+                var userLogoutItem = menuItemsList.FirstOrDefault(item => item.id == ConsoleKey.F1);
+                if (userLogoutItem.id != default)
+                {
+                    menuItemsList.Remove(userLogoutItem);
+                    menuItemsList.Insert(0, (userLogoutItem.id, "Logout", (Action)this.Logout));
+                }
+
+                break;
+            default: // Guest or other roles
+                menuItemsList = this.guestMainMenu.GetMenuItems().ToList();
+                var guestLoginItem = menuItemsList.FirstOrDefault(item => item.id == ConsoleKey.F1);
+                if (guestLoginItem.id != default)
+                {
+                    menuItemsList.Remove(guestLoginItem);
+                    menuItemsList.Insert(0, (guestLoginItem.id, guestLoginItem.caption, (Action)this.Login));
+                }
+
+                break;
+        }
+
+        return menuItemsList;
     }
 }

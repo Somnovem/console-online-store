@@ -1,9 +1,6 @@
-using ConsoleApp.MenuCore;
-using StoreDAL.Data;
-
 namespace ConsoleApp.MenuBuilder;
 
 public interface IMenuCreator
 {
-    Menu Create(StoreDbContext context);
+    (ConsoleKey id, string caption, Action action)[] GetMenuItems();
 }

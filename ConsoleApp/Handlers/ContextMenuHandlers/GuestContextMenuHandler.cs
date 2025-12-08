@@ -1,21 +1,23 @@
-﻿namespace ConsoleApp.Handlers.ContextMenuHandlers;
-using System;
-using StoreBLL.Interfaces;
-using StoreBLL.Models;
+﻿using StoreBLL.Models;
+using StoreBLL.Services;
 
-public class GuestContextMenuHandler : ContextMenuHandler
+namespace ConsoleApp.MenuBuilder
 {
-    public GuestContextMenuHandler(ICrud service, Func<AbstractModel> readModel)
-        : base(service, readModel)
+    public class GuestContextMenuHandler : ContextMenuHandler<ProductTitleService>
     {
-    }
+        public GuestContextMenuHandler(
+            ProductTitleService service,
+            Func<AbstractModel> readModel)
+            : base(service, readModel)
+        {
+        }
 
-    public override (ConsoleKey id, string caption, Action action)[] GenerateMenuItems()
-    {
-        (ConsoleKey id, string caption, Action action)[] array =
-        [
-            (ConsoleKey.V, "View Details", this.GetItemDetails),
-        ];
-        return array;
+        public override (ConsoleKey id, string caption, Action action)[] GenerateMenuItems()
+        {
+            return new (ConsoleKey, string, Action)[]
+            {
+                (ConsoleKey.V, "View Details", this.GetItemDetails),
+            };
+        }
     }
 }

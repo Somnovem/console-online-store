@@ -1,51 +1,95 @@
-﻿namespace ConsoleApp.Handlers.ContextMenuHandlers;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using StoreBLL.Interfaces;
+﻿using ConsoleApp.Helpers;
 using StoreBLL.Models;
+using StoreBLL.Services;
 
-public class AdminContextMenuHandler : ContextMenuHandler
+namespace ConsoleApp.MenuBuilder
 {
-    public AdminContextMenuHandler(ICrud service, Func<AbstractModel> readModel)
-        : base(service, readModel)
+    public class AdminContextMenuHandler : ContextMenuHandler<ProductService>
     {
-    }
+        public AdminContextMenuHandler(ProductService service, Func<AbstractModel> readModel)
+            : base(service, readModel)
+        {
+        }
 
-    public void AddItem()
-    {
-        this.Service.Add(this.ReadModel());
-    }
+        public void AddItem()
+        {
+            Console.WriteLine("\n--- Add New Item ---");
+            try
+            {
+                var item = this.readModel();
+                this.service.Add(item);
+                Console.WriteLine("Item added successfully.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error adding item: {ex.Message}");
+            }
+            finally
+            {
+                InputHelper.PressAnyKeyToContinue();
+            }
+        }
 
-    public void RemoveItem()
-    {
-        Console.WriteLine("Input record ID that will be removed");
-        int id = int.Parse(Console.ReadLine() !, CultureInfo.InvariantCulture);
-        this.service.Delete(id);
-    }
+        public void RemoveItem()
+        {
+            Console.WriteLine("\n--- Remove Item ---");
+            try
+            {
+                int id = InputHelper.ReadInt("record ID that will be removed");
+                this.service.Delete(id);
+                Console.WriteLine($"Item with ID {id} removed successfully.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error removing item: {ex.Message}");
+            }
+            finally
+            {
+                InputHelper.PressAnyKeyToContinue();
+            }
+        }
 
-    public void EditItem()
-    {
-        Console.WriteLine("Input record ID that will be edited");
-        int id = int.Parse(Console.ReadLine() !, CultureInfo.InvariantCulture);
-        var record = this.readModel();
+        public void EditItem()
+        {
+            Console.WriteLine("\n--- Edit Item ---");
+            try
+            {
+                int id = InputHelper.ReadInt("Item ID to update");
+                var existingItem = this.service.GetById(id);
 
-        // TODO
-        this.Service.Update(record);
-    }
+                if (existingItem == null)
+                {
+                    Console.WriteLine($"Item with ID {id} not found.");
+                    return;
+                }
 
-    public override (ConsoleKey id, string caption, Action action)[] GenerateMenuItems()
-    {
-        (ConsoleKey id, string caption, Action action)[] array =
+                Console.WriteLine($"\nEditing Item (ID: {existingItem.Id}, Current: {existingItem.ToString()})");
+
+                var updatedItem = this.readModel();
+                updatedItem.Id = id;
+
+                this.service.Update(updatedItem);
+                Console.WriteLine($"Item with ID {id} updated successfully!");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error updating item: {ex.Message}");
+            }
+            finally
+            {
+                InputHelper.PressAnyKeyToContinue();
+            }
+        }
+
+        public override (ConsoleKey id, string caption, Action action)[] GenerateMenuItems()
+        {
+            return new (ConsoleKey, string, Action)[]
             {
                 (ConsoleKey.A, "Add Item", this.AddItem),
                 (ConsoleKey.R, "Remove Item", this.RemoveItem),
                 (ConsoleKey.E, "Edit Item", this.EditItem),
                 (ConsoleKey.V, "View Details", this.GetItemDetails),
             };
-        return array;
+        }
     }
 }

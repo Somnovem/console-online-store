@@ -1,32 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using StoreBLL.Interfaces;
+﻿using ConsoleApp.Controllers;
 using StoreBLL.Models;
+using StoreBLL.Services;
 
-namespace ConsoleApp.Handlers.ContextMenuHandlers;
-
-public class ShoppingContextMenuHandler : ContextMenuHandler
+namespace ConsoleApp.MenuBuilder.Shop
 {
-    public ShoppingContextMenuHandler(ICrud service, Func<AbstractModel> readModel)
-        : base(service, readModel)
+    public class ShoppingContextMenuHandler : ContextMenuHandler<ProductService>
     {
-    }
+        private readonly ShopController shopController;
 
-    public void CreateOrder()
-    {
-        throw new NotImplementedException();
-    }
+        public ShoppingContextMenuHandler(
+            ProductService service,
+            ShopController shopController,
+            Func<AbstractModel> readModel)
+            : base(service, readModel)
+        {
+            this.shopController = shopController ?? throw new ArgumentNullException(nameof(shopController));
+        }
 
-    public override (ConsoleKey id, string caption, Action action)[] GenerateMenuItems()
-    {
-        (ConsoleKey id, string caption, Action action)[] array =
+        public void CreateOrder()
+        {
+            this.shopController.AddOrder();
+            Console.WriteLine("Order creation process initiated.");
+        }
+
+        public override (ConsoleKey id, string caption, Action action)[] GenerateMenuItems()
+        {
+            return new (ConsoleKey, string, Action)[]
             {
-                 (ConsoleKey.V, "View Details", this.GetItemDetails),
-                 (ConsoleKey.A, "Add item to chart and create order", this.CreateOrder),
+                (ConsoleKey.V, "View Details", this.GetItemDetails),
+                (ConsoleKey.A, "Add item to cart and create order", this.CreateOrder),
             };
-        return array;
+        }
     }
 }

@@ -1,30 +1,39 @@
-﻿namespace ConsoleApp.Handlers.ContextMenuHandlers;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ConsoleApp.Helpers;
 using StoreBLL.Interfaces;
 using StoreBLL.Models;
 
-public abstract class ContextMenuHandler
+namespace ConsoleApp.MenuBuilder
 {
-    protected readonly ICrud Service;
-    protected readonly Func<AbstractModel> ReadModel;
-
-    protected ContextMenuHandler(ICrud service, Func<AbstractModel> readModel)
+    public abstract class ContextMenuHandler<T>
+        where T : class, ICrud
     {
-        this.Service = service;
-        this.ReadModel = readModel;
-    }
+        protected readonly T service;
+        protected readonly Func<AbstractModel> readModel;
 
-    public void GetItemDetails()
-    {
-        Console.WriteLine("Input record ID for more details");
-        int id = int.Parse(Console.ReadLine() !, CultureInfo.InvariantCulture);
-        Console.WriteLine(this.service.GetById(id));
-    }
+        protected ContextMenuHandler(T service, Func<AbstractModel> readModel)
+        {
+            this.service = service ?? throw new ArgumentNullException(nameof(service));
+            this.readModel = readModel ?? throw new ArgumentNullException(nameof(readModel));
+        }
 
-    public abstract (ConsoleKey id, string caption, Action action)[] GenerateMenuItems();
+        public abstract (ConsoleKey id, string caption, Action action)[] GenerateMenuItems();
+
+        protected void GetItemDetails()
+        {
+            var id = InputHelper.ReadInt("Enter ID to view details");
+            var item = this.service.GetById(id);
+
+            if (item != null)
+            {
+                Console.WriteLine($"\n--- Details for ID: {id} ---");
+                Console.WriteLine(item.ToString());
+            }
+            else
+            {
+                Console.WriteLine($"\nNo item found with ID: {id}");
+            }
+
+            InputHelper.PressAnyKeyToContinue();
+        }
+    }
 }
