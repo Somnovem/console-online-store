@@ -6,12 +6,14 @@ using System.Text;
 using System.Threading.Tasks;
 using ConsoleApp1;
 using ConsoleApp.Controllers;
-using ConsoleApp.Handlers.ContextMenu;
+using ConsoleApp.Handlers.ContextMenuHandlers;
 using ConsoleApp.Helpers;
+using ConsoleApp.MenuCore;
 using ConsoleMenu;
-using StoreDAL.Data;
-using StoreBLL.Models;
 using StoreBLL.Services;
+using StoreDAL.Data;
+
+namespace ConsoleApp.Controllers;
 
 public static class UserController
 {

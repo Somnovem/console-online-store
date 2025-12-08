@@ -3,7 +3,7 @@ using StoreDAL.Entities;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-// ToDo: add atribute here
+[Table("categories")]
 public class Category : BaseEntity
 {
     public Category()
@@ -17,7 +17,7 @@ public class Category : BaseEntity
         this.Name = name;
     }
 
-    // ToDo: add atribute here
+    [Column("category_name", TypeName = "varchar(100)")]
     public string Name { get; set; }
 
     public virtual IList<ProductTitle> Titles { get; set; }

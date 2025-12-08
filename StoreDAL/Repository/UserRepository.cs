@@ -1,48 +1,87 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.EntityFrameworkCore;
+using StoreDAL.Data;
 using StoreDAL.Entities;
 using StoreDAL.Interfaces;
 
-namespace StoreDAL.Repository
+namespace StoreDAL.Repository;
+
+public class UserRepository : AbstractRepository, IUserRepository
 {
-    public class UserRepository : IUserRepository
+    private readonly DbSet<User> dbSet;
+
+    public UserRepository(StoreDbContext context)
+        : base(context)
     {
-        public void Add(User entity)
+        ArgumentNullException.ThrowIfNull(context);
+        this.dbSet = context.Set<User>();
+    }
+
+    public void Add(User? entity)
+    {
+        ArgumentNullException.ThrowIfNull(entity);
+        this.dbSet.Add(entity);
+        this.context.SaveChanges();
+    }
+
+    public void Delete(User? entity)
+    {
+        ArgumentNullException.ThrowIfNull(entity);
+        this.dbSet.Remove(entity);
+        this.context.SaveChanges();
+    }
+
+    public void DeleteById(int id)
+    {
+        var entity = this.dbSet.Find(id);
+        if (entity != null)
         {
-            throw new NotImplementedException();
+            this.Delete(entity);
+        }
+    }
+
+    public IEnumerable<User> GetAll()
+    {
+        return this.dbSet.ToList();
+    }
+
+    public IEnumerable<User> GetAll(int pageNumber, int rowCount)
+    {
+        if (pageNumber < 1)
+        {
+            pageNumber = 1;
         }
 
-        public void Delete(User entity)
+        if (rowCount < 1)
         {
-            throw new NotImplementedException();
+            rowCount = 10;
         }
 
-        public void DeleteById(int id)
-        {
-            throw new NotImplementedException();
-        }
+        return this.dbSet
+            .OrderBy(u => u.Id)
+            .Skip((pageNumber - 1) * rowCount)
+            .Take(rowCount)
+            .ToList();
+    }
 
-        public IEnumerable<User> GetAll()
-        {
-            throw new NotImplementedException();
-        }
+    public User GetById(int id)
+    {
+        return this.dbSet.Find(id);
+    }
 
-        public IEnumerable<User> GetAll(int pageNumber, int rowCount)
-        {
-            throw new NotImplementedException();
-        }
+    public void Update(User? entity)
+    {
+        ArgumentNullException.ThrowIfNull(entity);
 
-        public User GetById(int id)
+        var existing = this.dbSet.Find(entity.Id);
+        if (existing != null)
         {
-            throw new NotImplementedException();
+            this.context.Entry(existing).CurrentValues.SetValues(entity);
+            this.context.SaveChanges();
         }
+    }
 
-        public void Update(User entity)
-        {
-            throw new NotImplementedException();
-        }
+    public User? GetUserByLogin(string? login)
+    {
+        return this.dbSet.Include(u => u.Role).FirstOrDefault(u => u.Login == login);
     }
 }

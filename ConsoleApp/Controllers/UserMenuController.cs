@@ -1,16 +1,15 @@
-using ConsoleMenu;
+using ConsoleApp.Helpers;
+using ConsoleApp.MenuBuilder.Guest;
+using ConsoleApp.MenuBuilder.User;
+using ConsoleApp.MenuCore;
 using ConsoleMenu.Builder;
+using StoreBLL.Exceptions;
+using StoreBLL.Models;
+using StoreBLL.Services;
 using StoreDAL.Data;
 using StoreDAL.Data.InitDataFactory;
 
-namespace ConsoleApp1;
-
-public enum UserRoles
-{
-    Guest,
-    Administrator,
-    RegistredCustomer,
-}
+namespace ConsoleApp.Controllers;
 
 public static class UserMenuController
 {
@@ -38,39 +37,56 @@ public static class UserMenuController
 
     public static void Login()
     {
-        Console.WriteLine("Login: ");
-        var login = Console.ReadLine();
-        Console.WriteLine("Password: ");
-        var password = Console.ReadLine();
-        if (login == "admin")
-        {
-            userId = 1;
-            userRole = UserRoles.Administrator;
-        }
+        var login = ConsoleManipulationHelper.GetString("Login: ");
+        var password = ConsoleManipulationHelper.GetString("Password: ");
 
-        if (login == "user")
+        UserService userService = new UserService(context);
+        try
         {
-            userId = 1;
-            userRole = UserRoles.RegistredCustomer;
-        }
+            (int, UserRoles) loggedInUser = userService.Login(login, password);
+            userId = loggedInUser.Item1;
+            userRole = loggedInUser.Item2;
 
-        // ToDo
+            Console.WriteLine("You were successfully logged in!");
+            RolesToMenu[userRole].Run();
+        }
+        catch (UserNotFound e)
+        {
+            Console.WriteLine(e.Message);
+        }
+    }
+
+    public static void Register()
+    {
+        UserService userService = new UserService(context);
+
+        var userModel = new UserModel(userService.GenerateNewId())
+        {
+            RoleId = 2,
+        };
+
+        userModel.Login = ConsoleManipulationHelper.GetLogin(userService);
+        userModel.Password = ConsoleManipulationHelper.GetString("Password: ");
+        userModel.Name = ConsoleManipulationHelper.GetString("First Name: ");
+        userModel.LastName = ConsoleManipulationHelper.GetString("Last Name: ");
+
+        userService.Add(userModel);
+        Console.WriteLine("You were successfully registered!");
+
+        userId = userModel.Id;
+        userRole = UserRoles.RegistredCustomer;
+        RolesToMenu[userRole].Run();
     }
 
     public static void Logout()
     {
         userId = 0;
         userRole = UserRoles.Guest;
+        RolesToMenu[userRole].Run();
     }
 
     public static void Start()
     {
-        ConsoleKey resKey;
-        bool updateItems = true;
-        do
-        {
-                resKey = RolesToMenu[userRole].RunOnce(ref updateItems);
-        }
-        while (resKey != ConsoleKey.Escape);
+        RolesToMenu[userRole].Run();
     }
 }

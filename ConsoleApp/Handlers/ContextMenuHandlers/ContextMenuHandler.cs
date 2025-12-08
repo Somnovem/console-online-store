@@ -23,7 +23,7 @@ public abstract class ContextMenuHandler
     {
         Console.WriteLine("Input record ID for more details");
         int id = int.Parse(Console.ReadLine() !, CultureInfo.InvariantCulture);
-        Console.WriteLine(this.Service.GetById(id));
+        Console.WriteLine(this.service.GetById(id));
     }
 
     public abstract (ConsoleKey id, string caption, Action action)[] GenerateMenuItems();

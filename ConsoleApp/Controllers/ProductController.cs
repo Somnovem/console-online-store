@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ConsoleApp1;
+﻿using ConsoleApp.Handlers.ContextMenuHandlers;
+using ConsoleApp.Helpers;
+using ConsoleApp.MenuCore;
+using ConsoleMenu;
+using StoreBLL.Models;
+using StoreBLL.Services;
 using StoreDAL.Data;
 
 namespace ConsoleApp.Controllers
@@ -34,7 +34,9 @@ namespace ConsoleApp.Controllers
 
         public static void ShowAllProducts()
         {
-            throw new NotImplementedException();
+            var service = new ProductService(context);
+            var menu = new ContextMenu(new GuestContextMenuHandler(service, null), service.GetAll);
+            menu.Run();
         }
 
         public static void AddCategory()

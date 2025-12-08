@@ -9,7 +9,7 @@ using StoreBLL.Models;
 
 internal static class InputHelper
 {
-    public static CategoryModel ReadCategoryiModel()
+    public static CategoryModel ReadCategoryisModel()
     {
         throw new NotImplementedException();
     }
@@ -22,18 +22,20 @@ internal static class InputHelper
     public static OrderStateModel ReadOrderStateModel()
     {
         Console.WriteLine("Input State Id");
-        var id = int.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
+        var id = int.Parse(Console.ReadLine() !, CultureInfo.InvariantCulture);
         Console.WriteLine("Input State Name");
         var name = Console.ReadLine();
+        ArgumentNullException.ThrowIfNull(name);
         return new OrderStateModel(id, name);
     }
 
     public static UserRoleModel ReadUserRoleModel()
     {
         Console.WriteLine("Input User Role Id");
-        var id = int.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
+        var id = int.Parse(Console.ReadLine() !, CultureInfo.InvariantCulture);
         Console.WriteLine("Input User Role Name");
         var name = Console.ReadLine();
+        ArgumentNullException.ThrowIfNull(name);
         return new UserRoleModel(id, name);
     }
 }

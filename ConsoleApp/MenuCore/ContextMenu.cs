@@ -4,49 +4,48 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ConsoleApp.Controllers;
-using ConsoleApp.Handlers.ContextMenu;
+using ConsoleApp.Handlers.ContextMenuHandlers;
 using ConsoleApp1;
 using StoreBLL.Interfaces;
 using StoreBLL.Models;
 
-namespace ConsoleMenu
+namespace ConsoleApp.MenuCore;
+
+public class ContextMenu : Menu
 {
-    public class ContextMenu : Menu
+    private readonly Func<IEnumerable<AbstractModel>> getAll;
+
+    public ContextMenu(ContextMenuHandler controller, Func<IEnumerable<AbstractModel>> getAll)
+        : base(controller?.GenerateMenuItems() !)
     {
-        private Func<IEnumerable<AbstractModel>> getAll;
+        private readonly Func<IEnumerable<AbstractModel>> getAll;
 
         public ContextMenu(AdminContextMenuHandler controller, Func<IEnumerable<AbstractModel>> getAll)
-            : base(controller.GenerateMenuItems())
+            : base(controller?.GenerateMenuItems() !)
         {
+            ArgumentNullException.ThrowIfNull(controller);
             this.getAll = getAll;
         }
 
-        public ContextMenu(Func<(ConsoleKey id, string caption, Action action)[]> generateMenuItems, Func<IEnumerable<AbstractModel>> getAll)
-            : base(generateMenuItems())
+    public override void Run()
+    {
+        ConsoleKey resKey;
+        bool updateItems = true;
+        do
         {
-            this.getAll = getAll;
-        }
-
-        public override void Run()
-        {
-            ConsoleKey resKey;
-            bool updateItems = true;
-            do
+            if (updateItems)
             {
-                if (updateItems)
+                Console.WriteLine("======= Current DataSet ==========");
+                foreach (var record in this.getAll())
                 {
-                    Console.WriteLine("======= Current DataSet ==========");
-                    foreach (var record in this.getAll())
-                    {
-                        Console.WriteLine(record);
-                    }
-
-                    Console.WriteLine("===================================");
+                    Console.WriteLine(record);
                 }
 
-                resKey = this.RunOnce(ref updateItems);
+                Console.WriteLine("===================================");
             }
-            while (resKey != ConsoleKey.Escape);
+
+            resKey = this.RunOnce(ref updateItems);
         }
+        while (resKey != ConsoleKey.Q);
     }
 }

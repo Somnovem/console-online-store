@@ -1,13 +1,8 @@
 ﻿namespace StoreDAL.Data;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
-using StoreDAL.Data.InitDataFactory;
-using StoreDAL.Entities;
+using InitDataFactory;
+using Entities;
 
 public class StoreDbContext : DbContext
 {
@@ -39,6 +34,7 @@ public class StoreDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        ArgumentNullException.ThrowIfNull(modelBuilder);
         modelBuilder.Entity<Category>().HasData(this.factory.GetCategoryData());
         modelBuilder.Entity<Manufacturer>().HasData(this.factory.GetManufacturerData());
         modelBuilder.Entity<OrderState>().HasData(this.factory.GetOrderStateData());

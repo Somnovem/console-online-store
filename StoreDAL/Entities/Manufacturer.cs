@@ -1,13 +1,11 @@
-﻿namespace StoreDAL.Entities;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using StoreDAL.Entities;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
-// ToDo: add atribute here
+namespace StoreDAL.Entities;
+
+[Table("manufacturers")]
 public class Manufacturer : BaseEntity
 {
     public Manufacturer()
-        : base()
     {
     }
 
@@ -17,6 +15,6 @@ public class Manufacturer : BaseEntity
         this.Name = name;
     }
 
-    // ToDo: add atribute here
+    [Column("manufacturer_name", TypeName = "varchar(100)")]
     public string Name { get; set; }
 }

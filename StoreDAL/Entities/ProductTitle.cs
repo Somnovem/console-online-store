@@ -1,12 +1,10 @@
 ﻿namespace StoreDAL.Entities;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-// ToDo: add atribute here
+[Table("product_titles")]
 public class ProductTitle : BaseEntity
 {
     public ProductTitle()
-        : base()
     {
     }
 
@@ -17,10 +15,10 @@ public class ProductTitle : BaseEntity
         this.CategoryId = categoryId;
     }
 
-    // ToDo: add atribute here
+    [Column("product_title", TypeName = "varchar(100)")]
     public string Title { get; set; }
 
-    // ToDo: add atribute here
+    [Column("category_id")]
     public int CategoryId { get; set; }
 
     public Category Category { get; set; }

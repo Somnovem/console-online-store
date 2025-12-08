@@ -1,9 +1,7 @@
-/*
-Yuriy Antonov copyright 2018-2020
-*/
+using ConsoleApp.MenuCore;
 using StoreDAL.Data;
 
-namespace ConsoleMenu.Builder;
+namespace ConsoleApp.MenuBuilder;
 
 public interface IMenuCreator
 {

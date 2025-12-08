@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Data.Sqlite;
+﻿using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using StoreDAL.Data.InitDataFactory;
 
@@ -19,19 +13,19 @@ namespace StoreDAL.Data
               this.factory = factory;
         }
 
-        public StoreDbContext CreateContext()
-        {
-            var context = new StoreDbContext(this.CreateOptions(), this.factory);
-            context.Database.EnsureDeleted();
-            context.Database.EnsureCreated();
-            return context;
-        }
-
-        public DbContextOptions<StoreDbContext> CreateOptions()
+        public static DbContextOptions<StoreDbContext> CreateOptions()
         {
             return new DbContextOptionsBuilder<StoreDbContext>()
                 .UseSqlite(CreateConnectionString())
                 .Options;
+        }
+
+        public StoreDbContext CreateContext()
+        {
+            var context = new StoreDbContext(CreateOptions(), this.factory);
+            context.Database.EnsureDeleted();
+            context.Database.EnsureCreated();
+            return context;
         }
 
         private static string CreateConnectionString()

@@ -16,6 +16,7 @@ public class OrderStateRepository : AbstractRepository, IOrderStateRepository
     public OrderStateRepository(StoreDbContext context)
         : base(context)
     {
+        ArgumentNullException.ThrowIfNull(context);
         this.dbSet = context.Set<OrderState>();
     }
 

@@ -1,10 +1,5 @@
 ﻿namespace StoreDAL.Data.InitDataFactory;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using StoreDAL.Entities;
+using Entities;
 
 public abstract class AbstractDataFactory
 {

@@ -19,14 +19,14 @@ public class OrderContextMenuHandler : ContextMenuHandler
     {
         Console.WriteLine("Input record ID that will be removed");
         int id = int.Parse(Console.ReadLine() !, CultureInfo.InvariantCulture);
-        this.Service.Delete(id);
+        this.service.Delete(id);
     }
 
     public void EditItem()
     {
         Console.WriteLine("Input record ID that will be edited");
         int id = int.Parse(Console.ReadLine() !, CultureInfo.InvariantCulture);
-        var record = this.ReadModel();
+        var record = this.readModel();
 
         // TODO
         this.Service.Update(record);

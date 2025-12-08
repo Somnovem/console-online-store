@@ -1,7 +1,7 @@
-using ConsoleApp1;
+using ConsoleApp.Controllers;
 using StoreDAL.Data;
 
-namespace ConsoleMenu.Builder;
+namespace ConsoleApp.MenuBuilder.User;
 
 public class UserMainMenu : AbstractMenuCreator
 {

@@ -1,17 +1,12 @@
-﻿namespace StoreDAL.Entities;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
-// ToDo: add atribute here
+namespace StoreDAL.Entities;
+using System.Collections.Generic;
+
+[Table("users")]
 public class User : BaseEntity
 {
     public User()
-        : base()
     {
     }
 
@@ -25,19 +20,19 @@ public class User : BaseEntity
         this.RoleId = roleId;
     }
 
-    // ToDo: add atribute here
+    [Column("first_name", TypeName = "varchar(100)")]
     public string Name { get; set; }
 
-    // ToDo: add atribute here
+    [Column("last_name", TypeName = "varchar(100)")]
     public string LastName { get; set; }
 
-    // ToDo: add atribute here
+    [Column("login", TypeName = "varchar(100)")]
     public string Login { get; set; }
 
-    // ToDo: add atribute here
+    [Column("password", TypeName = "varchar(100)")]
     public string Password { get; set; }
 
-    // ToDo: add atribute here
+    [Column("user_role_id")]
     public int RoleId { get; set; }
 
     public UserRole Role { get; set; }

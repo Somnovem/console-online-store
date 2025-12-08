@@ -12,11 +12,11 @@ public interface IRepository<TEntity>
 
     TEntity GetById(int id);
 
-    void Add(TEntity entity);
+    void Add(TEntity? entity);
 
-    void Delete(TEntity entity);
+    void Delete(TEntity? entity);
 
     void DeleteById(int id);
 
-    void Update(TEntity entity);
+    void Update(TEntity? entity);
 }

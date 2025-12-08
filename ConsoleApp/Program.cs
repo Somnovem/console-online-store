@@ -1,14 +1,6 @@
-﻿using System;
-using System.Linq;
-using ConsoleMenu;
-using Microsoft.Data.Sqlite;
-using Microsoft.EntityFrameworkCore;
-using StoreDAL.Data;
-using StoreDAL.Data.InitDataFactory;
-using StoreDAL.Entities;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+﻿using ConsoleApp.Controllers;
 
-namespace ConsoleApp1
+namespace ConsoleApp
 {
     public static class Program
     {

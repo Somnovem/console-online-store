@@ -13,6 +13,7 @@ namespace StoreDAL.Repository
 
         protected AbstractRepository(StoreDbContext context)
         {
+            ArgumentNullException.ThrowIfNull(context);
             this.context = context;
         }
     }
