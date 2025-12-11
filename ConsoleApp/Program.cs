@@ -6,6 +6,7 @@ using ConsoleApp.MenuBuilder.User;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using StoreBLL.Services;
 using StoreDAL.Data;
 using StoreDAL.Data.InitDataFactory;
@@ -33,25 +34,36 @@ namespace ConsoleApp
                 }
                 catch (ArgumentException ex)
                 {
-                    Console.WriteLine($"Encountered an error: {ex.Message}");
-                    Console.WriteLine(ex.ToString());
+                    Console.WriteLine($"An error occurred: {ex.Message}");
+                    Console.WriteLine("Press any key to exit...");
+                    Console.ReadKey();
                 }
                 catch (InvalidOperationException ex)
                 {
-                    Console.WriteLine($"Encountered an error: {ex.Message}");
-                    Console.WriteLine(ex.ToString());
+                    Console.WriteLine($"An error occurred: {ex.Message}");
+                    Console.WriteLine("Press any key to exit...");
+                    Console.ReadKey();
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Unexpected error: {ex.Message}");
-                    Console.WriteLine(ex.ToString());
-                    throw;
+                    Console.WriteLine($"An unexpected error occurred: {ex.Message}");
+                    Console.WriteLine("Press any key to exit...");
+                    Console.ReadKey();
                 }
             }
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                .ConfigureLogging(logging =>
+                {
+                    logging.ClearProviders();
+                    logging.AddConsole();
+                    logging.SetMinimumLevel(LogLevel.Warning);
+                    logging.AddFilter("Microsoft.EntityFrameworkCore.Database.Command", LogLevel.None);
+                    logging.AddFilter("Microsoft.EntityFrameworkCore.Query", LogLevel.None);
+                    logging.AddFilter("Microsoft.EntityFrameworkCore", LogLevel.None);
+                })
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddSingleton<IDataFactory, ReleaseDataFactory>();
@@ -60,6 +72,8 @@ namespace ConsoleApp
                     {
                         string dbPath = Path.Combine(AppContext.BaseDirectory, "../..", "store.db");
                         options.UseSqlite($"Data Source={dbPath}");
+                        options.EnableSensitiveDataLogging(false);
+                        options.LogTo(_ => { }, LogLevel.None);
                     });
 
                     services.AddScoped<ICategoryRepository, CategoryRepository>();

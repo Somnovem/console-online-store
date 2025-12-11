@@ -44,7 +44,6 @@ public class ProductController
         catch (Exception ex)
         {
             Console.WriteLine($"Unexpected error adding product: {ex.Message}");
-            throw;
         }
 
         InputHelper.PressAnyKeyToContinue();
@@ -81,7 +80,6 @@ public class ProductController
         catch (Exception ex)
         {
             Console.WriteLine($"Unexpected error updating product: {ex.Message}");
-            throw;
         }
 
         InputHelper.PressAnyKeyToContinue();
@@ -107,7 +105,6 @@ public class ProductController
         catch (Exception ex)
         {
             Console.WriteLine($"Unexpected error deleting product: {ex.Message}");
-            throw;
         }
 
         InputHelper.PressAnyKeyToContinue();
@@ -140,7 +137,6 @@ public class ProductController
         catch (Exception ex)
         {
             Console.WriteLine($"Unexpected error showing product: {ex.Message}");
-            throw;
         }
 
         InputHelper.PressAnyKeyToContinue();
@@ -175,7 +171,6 @@ public class ProductController
         catch (Exception ex)
         {
             Console.WriteLine($"Unexpected error showing all products: {ex.Message}");
-            throw;
         }
 
         InputHelper.PressAnyKeyToContinue();
@@ -201,7 +196,6 @@ public class ProductController
         catch (Exception ex)
         {
             Console.WriteLine($"Unexpected error adding category: {ex.Message}");
-            throw;
         }
 
         InputHelper.PressAnyKeyToContinue();
@@ -236,7 +230,6 @@ public class ProductController
         catch (Exception ex)
         {
             Console.WriteLine($"Unexpected error updating category: {ex.Message}");
-            throw;
         }
 
         InputHelper.PressAnyKeyToContinue();
@@ -262,7 +255,6 @@ public class ProductController
         catch (Exception ex)
         {
             Console.WriteLine($"Unexpected error deleting category: {ex.Message}");
-            throw;
         }
 
         InputHelper.PressAnyKeyToContinue();
@@ -297,7 +289,6 @@ public class ProductController
         catch (Exception ex)
         {
             Console.WriteLine($"Unexpected error showing all categories: {ex.Message}");
-            throw;
         }
 
         InputHelper.PressAnyKeyToContinue();
@@ -323,7 +314,6 @@ public class ProductController
         catch (Exception ex)
         {
             Console.WriteLine($"Unexpected error adding product title: {ex.Message}");
-            throw;
         }
 
         InputHelper.PressAnyKeyToContinue();
@@ -358,7 +348,6 @@ public class ProductController
         catch (Exception ex)
         {
             Console.WriteLine($"Unexpected error updating product title: {ex.Message}");
-            throw;
         }
 
         InputHelper.PressAnyKeyToContinue();
@@ -384,7 +373,6 @@ public class ProductController
         catch (Exception ex)
         {
             Console.WriteLine($"Unexpected error deleting product title: {ex.Message}");
-            throw;
         }
 
         InputHelper.PressAnyKeyToContinue();
@@ -419,7 +407,6 @@ public class ProductController
         catch (Exception ex)
         {
             Console.WriteLine($"Unexpected error showing all product titles: {ex.Message}");
-            throw;
         }
 
         InputHelper.PressAnyKeyToContinue();
@@ -445,7 +432,6 @@ public class ProductController
         catch (Exception ex)
         {
             Console.WriteLine($"Unexpected error adding manufacturer: {ex.Message}");
-            throw;
         }
 
         InputHelper.PressAnyKeyToContinue();
@@ -480,7 +466,6 @@ public class ProductController
         catch (Exception ex)
         {
             Console.WriteLine($"Unexpected error updating manufacturer: {ex.Message}");
-            throw;
         }
 
         InputHelper.PressAnyKeyToContinue();
@@ -506,7 +491,6 @@ public class ProductController
         catch (Exception ex)
         {
             Console.WriteLine($"Unexpected error deleting manufacturer: {ex.Message}");
-            throw;
         }
 
         InputHelper.PressAnyKeyToContinue();
@@ -541,7 +525,6 @@ public class ProductController
         catch (Exception ex)
         {
             Console.WriteLine($"Unexpected error showing all manufacturers: {ex.Message}");
-            throw;
         }
 
         InputHelper.PressAnyKeyToContinue();

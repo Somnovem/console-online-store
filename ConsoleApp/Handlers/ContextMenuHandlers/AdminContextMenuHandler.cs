@@ -31,7 +31,6 @@ namespace ConsoleApp.MenuBuilder
             catch (Exception ex)
             {
                 Console.WriteLine($"Unexpected error adding item: {ex.Message}");
-                throw;
             }
             finally
             {
@@ -59,7 +58,6 @@ namespace ConsoleApp.MenuBuilder
             catch (Exception ex)
             {
                 Console.WriteLine($"Unexpected error removing item: {ex.Message}");
-                throw;
             }
             finally
             {
@@ -100,7 +98,6 @@ namespace ConsoleApp.MenuBuilder
             catch (Exception ex)
             {
                 Console.WriteLine($"Unexpected error updating item: {ex.Message}");
-                throw;
             }
             finally
             {

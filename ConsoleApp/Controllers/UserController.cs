@@ -43,8 +43,7 @@ public class UserController
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Unexpected error registering user: {ex.Message}");
-            throw;
+            Console.WriteLine($"An error occurred while registering user: {ex.Message}");
         }
 
         InputHelper.PressAnyKeyToContinue();
@@ -85,7 +84,6 @@ public class UserController
         catch (Exception ex)
         {
             Console.WriteLine($"Unexpected error updating user: {ex.Message}");
-            throw;
         }
 
         InputHelper.PressAnyKeyToContinue();
@@ -111,7 +109,6 @@ public class UserController
         catch (Exception ex)
         {
             Console.WriteLine($"Unexpected error deleting user: {ex.Message}");
-            throw;
         }
 
         InputHelper.PressAnyKeyToContinue();
@@ -144,7 +141,6 @@ public class UserController
         catch (Exception ex)
         {
             Console.WriteLine($"Unexpected error showing user: {ex.Message}");
-            throw;
         }
 
         InputHelper.PressAnyKeyToContinue();
@@ -179,7 +175,6 @@ public class UserController
         catch (Exception ex)
         {
             Console.WriteLine($"Unexpected error showing all users: {ex.Message}");
-            throw;
         }
 
         InputHelper.PressAnyKeyToContinue();
@@ -214,7 +209,6 @@ public class UserController
         catch (Exception ex)
         {
             Console.WriteLine($"Unexpected error showing all user roles: {ex.Message}");
-            throw;
         }
 
         InputHelper.PressAnyKeyToContinue();
@@ -240,7 +234,6 @@ public class UserController
         catch (Exception ex)
         {
             Console.WriteLine($"Unexpected error adding user role: {ex.Message}");
-            throw;
         }
 
         InputHelper.PressAnyKeyToContinue();
@@ -275,7 +268,6 @@ public class UserController
         catch (Exception ex)
         {
             Console.WriteLine($"Unexpected error updating user role: {ex.Message}");
-            throw;
         }
 
         InputHelper.PressAnyKeyToContinue();
@@ -301,7 +293,6 @@ public class UserController
         catch (Exception ex)
         {
             Console.WriteLine($"Unexpected error deleting user role: {ex.Message}");
-            throw;
         }
 
         InputHelper.PressAnyKeyToContinue();

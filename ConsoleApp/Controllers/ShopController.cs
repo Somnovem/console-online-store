@@ -42,7 +42,6 @@ public class ShopController
         catch (Exception ex)
         {
             Console.WriteLine($"Unexpected error creating order: {ex.Message}");
-            throw;
         }
 
         InputHelper.PressAnyKeyToContinue();
@@ -77,7 +76,6 @@ public class ShopController
         catch (Exception ex)
         {
             Console.WriteLine($"Unexpected error updating order: {ex.Message}");
-            throw;
         }
 
         InputHelper.PressAnyKeyToContinue();
@@ -103,7 +101,6 @@ public class ShopController
         catch (Exception ex)
         {
             Console.WriteLine($"Unexpected error cancelling/deleting order: {ex.Message}");
-            throw;
         }
 
         InputHelper.PressAnyKeyToContinue();
@@ -136,7 +133,6 @@ public class ShopController
         catch (Exception ex)
         {
             Console.WriteLine($"Unexpected error showing order: {ex.Message}");
-            throw;
         }
 
         InputHelper.PressAnyKeyToContinue();
@@ -171,7 +167,6 @@ public class ShopController
         catch (Exception ex)
         {
             Console.WriteLine($"Unexpected error showing all orders: {ex.Message}");
-            throw;
         }
 
         InputHelper.PressAnyKeyToContinue();
@@ -216,7 +211,6 @@ public class ShopController
         catch (Exception ex)
         {
             Console.WriteLine($"Unexpected error while changing order status: {ex.Message}");
-            throw;
         }
 
         InputHelper.PressAnyKeyToContinue();
@@ -242,7 +236,6 @@ public class ShopController
         catch (Exception ex)
         {
             Console.WriteLine($"Unexpected error adding order detail: {ex.Message}");
-            throw;
         }
 
         InputHelper.PressAnyKeyToContinue();
@@ -277,7 +270,6 @@ public class ShopController
         catch (Exception ex)
         {
             Console.WriteLine($"Unexpected error updating order detail: {ex.Message}");
-            throw;
         }
 
         InputHelper.PressAnyKeyToContinue();
@@ -303,7 +295,6 @@ public class ShopController
         catch (Exception ex)
         {
             Console.WriteLine($"Unexpected error deleting order detail: {ex.Message}");
-            throw;
         }
 
         InputHelper.PressAnyKeyToContinue();
@@ -338,7 +329,6 @@ public class ShopController
         catch (Exception ex)
         {
             Console.WriteLine($"Unexpected error showing all order details: {ex.Message}");
-            throw;
         }
 
         InputHelper.PressAnyKeyToContinue();
@@ -373,7 +363,6 @@ public class ShopController
         catch (Exception ex)
         {
             Console.WriteLine($"Unexpected error showing all order states: {ex.Message}");
-            throw;
         }
 
         InputHelper.PressAnyKeyToContinue();

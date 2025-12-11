@@ -85,8 +85,7 @@ public class UserMenuController
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Unexpected error during login: {ex.Message}");
-            throw;
+            Console.WriteLine($"An error occurred during login: {ex.Message}");
         }
     }
 
@@ -99,8 +98,7 @@ public class UserMenuController
     {
         ClearConsole();
         Console.WriteLine("An error occurred while building the menu!");
-        Console.WriteLine($"Error Message: {ex.Message}");
-        Console.WriteLine($"Error Details: {ex.ToString()}");
+        Console.WriteLine($"Error: {ex.Message}");
         InputHelper.PressAnyKeyToContinue();
     }
 
@@ -149,7 +147,6 @@ public class UserMenuController
             catch (Exception ex)
             {
                 DisplayError(ex);
-                throw;
             }
         }
     }
