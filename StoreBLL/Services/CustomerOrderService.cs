@@ -95,6 +95,7 @@
             }
 
             var model = new CustomerOrderModel(entity.Id, entity.OperationTime, entity.CustomerId, entity.OrderStateId);
+            model.OrderStateName = entity.OrderState?.StateName;
 
             if (entity.CustomerOrderDetails != null)
             {

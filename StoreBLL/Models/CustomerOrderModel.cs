@@ -48,6 +48,11 @@ namespace StoreBLL.Models
         public int OrderStateId { get; set; }
 
         /// <summary>
+        /// Gets or sets the name of the current state of the order.
+        /// </summary>
+        public string? OrderStateName { get; set; }
+
+        /// <summary>
         /// Gets the total amount of the order, calculated by summing the product of price and quantity for each order detail.
         /// </summary>
         public decimal TotalAmount => this.OrderDetails.Sum(detail => detail.Price * detail.ProductAmount);
@@ -60,10 +65,11 @@ namespace StoreBLL.Models
         /// <summary>
         /// Returns a string representation of the customer order.
         /// </summary>
-        /// <returns>A string containing the order ID, operation date, customer ID, and order state ID.</returns>
+        /// <returns>A string containing the order ID, operation date, customer ID, and order state name.</returns>
         public override string ToString()
         {
-            return $"Id: {this.Id}, Date: {this.OperationTime.ToShortDateString()}, CustomerId: {this.CustomerId}, StateId: {this.OrderStateId}";
+            string stateName = !string.IsNullOrEmpty(this.OrderStateName) ? this.OrderStateName : $"StateId: {this.OrderStateId}";
+            return $"Id: {this.Id}, Date: {this.OperationTime.ToShortDateString()}, CustomerId: {this.CustomerId}, State: {stateName}";
         }
     }
 }

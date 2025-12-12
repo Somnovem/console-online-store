@@ -1,6 +1,7 @@
 namespace ConsoleApp.MenuBuilder.User;
 
 using ConsoleApp.Controllers;
+using ConsoleApp.Helpers;
 using System;
 using System.Diagnostics;
 
@@ -27,8 +28,16 @@ public class UserMainMenu : AbstractMenuCreator
             (ConsoleKey.D2, "Show product list", this.productController.ShowAllProducts),
             (ConsoleKey.D3, "Show order list", this.shopController.ShowAllOrders),
             (ConsoleKey.D4, "Cancel order", this.shopController.DeleteOrder),
-            (ConsoleKey.D5, "Confirm order delivery", () => { Console.WriteLine("Confirm order delivery - TODO"); }),
-            (ConsoleKey.D6, "Add order feedback", () => { Console.WriteLine("Add order feedback - TODO"); }),
+            (ConsoleKey.D5, "Confirm order delivery", () =>
+            {
+                Console.WriteLine("\nConfirm order delivery - TODO");
+                InputHelper.PressAnyKeyToContinue();
+            }),
+            (ConsoleKey.D6, "Add order feedback", () =>
+            {
+                Console.WriteLine("\nAdd order feedback - TODO");
+                InputHelper.PressAnyKeyToContinue();
+            }),
         };
 
         Debug.WriteLine($"Menu item count is: {array.Length}");

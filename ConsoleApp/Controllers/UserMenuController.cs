@@ -114,6 +114,28 @@ public class UserMenuController
         }
     }
 
+    /// <summary>
+    /// Normalizes a ConsoleKey to handle both main keyboard and numpad keys.
+    /// Maps NumPad keys to their corresponding D keys for consistent menu handling.
+    /// </summary>
+    private static ConsoleKey NormalizeKey(ConsoleKey key)
+    {
+        return key switch
+        {
+            ConsoleKey.NumPad0 => ConsoleKey.D0,
+            ConsoleKey.NumPad1 => ConsoleKey.D1,
+            ConsoleKey.NumPad2 => ConsoleKey.D2,
+            ConsoleKey.NumPad3 => ConsoleKey.D3,
+            ConsoleKey.NumPad4 => ConsoleKey.D4,
+            ConsoleKey.NumPad5 => ConsoleKey.D5,
+            ConsoleKey.NumPad6 => ConsoleKey.D6,
+            ConsoleKey.NumPad7 => ConsoleKey.D7,
+            ConsoleKey.NumPad8 => ConsoleKey.D8,
+            ConsoleKey.NumPad9 => ConsoleKey.D9,
+            _ => key,
+        };
+    }
+
     private void Run()
     {
         while (!this.isExiting)
@@ -132,9 +154,19 @@ public class UserMenuController
                 }
 
                 ConsoleKeyInfo res = Console.ReadKey(true);
-                var selectedItem = menuItemsArray.FirstOrDefault(item => item.id == res.Key);
+                ConsoleKey key = NormalizeKey(res.Key);
+                var selectedItem = menuItemsArray.FirstOrDefault(item => item.id == key);
 
-                selectedItem.action?.Invoke();
+                if (selectedItem.action != null)
+                {
+                    selectedItem.action.Invoke();
+                }
+                else if (key != ConsoleKey.Escape)
+                {
+                    // Key pressed but no matching menu item found
+                    Console.WriteLine($"\nNo action found for key: {key}");
+                    InputHelper.PressAnyKeyToContinue();
+                }
             }
             catch (ArgumentException ex)
             {

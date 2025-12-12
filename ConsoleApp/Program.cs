@@ -1,5 +1,6 @@
-﻿using ConsoleApp.Controllers;
-using ConsoleApp.Helpers;
+﻿using System.Globalization;
+using System.Text;
+using ConsoleApp.Controllers;
 using ConsoleApp.MenuBuilder.Admin;
 using ConsoleApp.MenuBuilder.Guest;
 using ConsoleApp.MenuBuilder.User;
@@ -19,6 +20,18 @@ namespace ConsoleApp
     {
         public static void Main(string[] args)
         {
+            var culture = new CultureInfo("uk-UA");
+            CultureInfo.CurrentCulture = culture;
+            CultureInfo.CurrentUICulture = culture;
+            try
+            {
+                Console.OutputEncoding = Encoding.UTF8;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+            }
+
             var host = CreateHostBuilder(args).Build();
 
             using (var scope = host.Services.CreateScope())

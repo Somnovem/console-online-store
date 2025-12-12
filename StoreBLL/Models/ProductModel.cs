@@ -23,6 +23,7 @@ namespace StoreBLL.Models
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="ProductModel"/> class.
         /// Creates a new instance of <see cref="ProductModel"/> with default values.
         /// </summary>
         public ProductModel()
