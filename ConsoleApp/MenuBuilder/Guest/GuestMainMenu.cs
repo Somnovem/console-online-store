@@ -21,9 +21,9 @@ public class GuestMainMenu : AbstractMenuCreator
         (ConsoleKey id, string caption, Action action)[] array =
         [
 
-            (ConsoleKey.F1, "Login", () => { }),
-            (ConsoleKey.F2, "Show product list", this.productController.ShowAllProducts),
-            (ConsoleKey.F3, "Register", this.userController.AddUser),
+            (ConsoleKey.D1, "Login", () => { }),
+            (ConsoleKey.D2, "Show product list", this.productController.ShowAllProducts),
+            (ConsoleKey.D3, "Register", this.userController.AddUser),
         ];
         return array;
     }

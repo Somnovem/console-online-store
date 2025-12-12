@@ -23,14 +23,14 @@ public class AdminMainMenu : AbstractMenuCreator
     {
         (ConsoleKey id, string caption, Action action)[] array =
             {
-                (ConsoleKey.F1, "Logout", () => { }),
-                (ConsoleKey.F2, "Show product list", this.productController.ShowAllProducts),
-                (ConsoleKey.F3, "Add product", this.productController.AddProduct),
-                (ConsoleKey.F4, "Show order list", this.shopController.ShowAllOrders),
-                (ConsoleKey.F5, "Cancel order", this.shopController.DeleteOrder),
-                (ConsoleKey.F6, "Change order status", this.shopController.ProcessOrder),
-                (ConsoleKey.F7, "User roles", this.userController.ShowAllUserRoles),
-                (ConsoleKey.F8, "Order states", this.shopController.ShowAllOrderStates),
+                (ConsoleKey.D1, "Logout", () => { }),
+                (ConsoleKey.D2, "Show product list", this.productController.ShowAllProducts),
+                (ConsoleKey.D3, "Add product", this.productController.AddProduct),
+                (ConsoleKey.D4, "Show order list", this.shopController.ShowAllOrders),
+                (ConsoleKey.D5, "Cancel order", this.shopController.DeleteOrder),
+                (ConsoleKey.D6, "Change order status", this.shopController.ProcessOrder),
+                (ConsoleKey.D7, "User roles", this.userController.ShowAllUserRoles),
+                (ConsoleKey.D8, "Order states", this.shopController.ShowAllOrderStates),
             };
         return array;
     }

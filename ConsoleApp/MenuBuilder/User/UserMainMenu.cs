@@ -23,12 +23,12 @@ public class UserMainMenu : AbstractMenuCreator
 
         (ConsoleKey id, string caption, Action action)[] array =
         {
-            (ConsoleKey.F1, "Logout", () => { }),
-            (ConsoleKey.F2, "Show product list", this.productController.ShowAllProducts),
-            (ConsoleKey.F3, "Show order list", this.shopController.ShowAllOrders),
-            (ConsoleKey.F4, "Cancel order", this.shopController.DeleteOrder),
-            (ConsoleKey.F5, "Confirm order delivery", () => { Console.WriteLine("Confirm order delivery - TODO"); }),
-            (ConsoleKey.F6, "Add order feedback", () => { Console.WriteLine("Add order feedback - TODO"); }),
+            (ConsoleKey.D1, "Logout", () => { }),
+            (ConsoleKey.D2, "Show product list", this.productController.ShowAllProducts),
+            (ConsoleKey.D3, "Show order list", this.shopController.ShowAllOrders),
+            (ConsoleKey.D4, "Cancel order", this.shopController.DeleteOrder),
+            (ConsoleKey.D5, "Confirm order delivery", () => { Console.WriteLine("Confirm order delivery - TODO"); }),
+            (ConsoleKey.D6, "Add order feedback", () => { Console.WriteLine("Add order feedback - TODO"); }),
         };
 
         Debug.WriteLine($"Menu item count is: {array.Length}");

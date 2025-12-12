@@ -53,7 +53,7 @@ namespace ConsoleApp
             }
         }
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
+        private static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
                 .ConfigureLogging(logging =>
                 {
@@ -66,44 +66,76 @@ namespace ConsoleApp
                 })
                 .ConfigureServices((hostContext, services) =>
                 {
+                    // Core Configuration
                     services.AddSingleton<IDataFactory, ReleaseDataFactory>();
 
-                    services.AddDbContext<StoreDbContext>(options =>
-                    {
-                        string dbPath = Path.Combine(AppContext.BaseDirectory, "../..", "store.db");
-                        options.UseSqlite($"Data Source={dbPath}");
-                        options.EnableSensitiveDataLogging(false);
-                        options.LogTo(_ => { }, LogLevel.None);
-                    });
-
-                    services.AddScoped<ICategoryRepository, CategoryRepository>();
-                    services.AddScoped<ICustomerOrderRepository, CustomerOrderRepository>();
-                    services.AddScoped<IManufacturerRepository, ManufacturerRepository>();
-                    services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
-                    services.AddScoped<IOrderStateRepository, OrderStateRepository>();
-                    services.AddScoped<IProductRepository, ProductRepository>();
-                    services.AddScoped<IProductTitleRepository, ProductTitleRepository>();
-                    services.AddScoped<IUserRepository, UserRepository>();
-                    services.AddScoped<IUserRoleRepository, UserRoleRepository>();
-
-                    services.AddScoped<CategoryService>();
-                    services.AddScoped<CustomerOrderService>();
-                    services.AddScoped<ManufacturerService>();
-                    services.AddScoped<OrderDetailService>();
-                    services.AddScoped<OrderStateService>();
-                    services.AddScoped<ProductService>();
-                    services.AddScoped<ProductTitleService>();
-                    services.AddScoped<UserService>();
-                    services.AddScoped<UserRoleService>();
-
-                    services.AddScoped<UserController>();
-                    services.AddScoped<ProductController>();
-                    services.AddScoped<ShopController>();
-                    services.AddScoped<UserMenuController>();
-
-                    services.AddScoped<AdminMainMenu>();
-                    services.AddScoped<GuestMainMenu>();
-                    services.AddScoped<UserMainMenu>();
+                    ConfigureDatabase(services);
+                    ConfigureRepositories(services);
+                    ConfigureServices(services);
+                    ConfigureControllersAndMenus(services);
                 });
+
+        /// <summary>
+        /// Configures the database context.
+        /// </summary>
+        private static void ConfigureDatabase(IServiceCollection services)
+        {
+            services.AddDbContext<StoreDbContext>(options =>
+            {
+                string dbPath = Path.Combine(AppContext.BaseDirectory, "../..", "store.db");
+                options.UseSqlite($"Data Source={dbPath}");
+                options.EnableSensitiveDataLogging(false);
+                options.LogTo(_ => { }, LogLevel.None);
+            });
+        }
+
+        /// <summary>
+        /// Configures Data Access Layer (DAL) repositories.
+        /// </summary>
+        private static void ConfigureRepositories(IServiceCollection services)
+        {
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<ICustomerOrderRepository, CustomerOrderRepository>();
+            services.AddScoped<IManufacturerRepository, ManufacturerRepository>();
+            services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
+            services.AddScoped<IOrderStateRepository, OrderStateRepository>();
+            services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IProductTitleRepository, ProductTitleRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IUserRoleRepository, UserRoleRepository>();
+        }
+
+        /// <summary>
+        /// Configures Business Logic Layer (BLL) services.
+        /// </summary>
+        private static void ConfigureServices(IServiceCollection services)
+        {
+            services.AddScoped<CategoryService>();
+            services.AddScoped<CustomerOrderService>();
+            services.AddScoped<ManufacturerService>();
+            services.AddScoped<OrderDetailService>();
+            services.AddScoped<OrderStateService>();
+            services.AddScoped<ProductService>();
+            services.AddScoped<ProductTitleService>();
+            services.AddScoped<UserService>();
+            services.AddScoped<UserRoleService>();
+        }
+
+        /// <summary>
+        /// Configures Presentation Layer (Controllers and Menu Builders).
+        /// </summary>
+        private static void ConfigureControllersAndMenus(IServiceCollection services)
+        {
+            // Controllers
+            services.AddScoped<UserController>();
+            services.AddScoped<ProductController>();
+            services.AddScoped<ShopController>();
+            services.AddScoped<UserMenuController>(); // Main app controller
+
+            // Menu Builders
+            services.AddScoped<AdminMainMenu>();
+            services.AddScoped<GuestMainMenu>();
+            services.AddScoped<UserMainMenu>();
+        }
     }
 }
