@@ -160,7 +160,7 @@ public class UserMenuController
         {
             case "Admin":
                 menuItemsList = this.adminMainMenu.GetMenuItems().ToList();
-                var adminLogoutItem = menuItemsList.FirstOrDefault(item => item.id == ConsoleKey.F1);
+                var adminLogoutItem = menuItemsList.FirstOrDefault(item => item.id == ConsoleKey.D1);
                 if (adminLogoutItem.id != default)
                 {
                     menuItemsList.Remove(adminLogoutItem);
@@ -170,7 +170,7 @@ public class UserMenuController
                 break;
             case "Registered":
                 menuItemsList = this.userMainMenu.GetMenuItems().ToList();
-                var userLogoutItem = menuItemsList.FirstOrDefault(item => item.id == ConsoleKey.F1);
+                var userLogoutItem = menuItemsList.FirstOrDefault(item => item.id == ConsoleKey.D1);
                 if (userLogoutItem.id != default)
                 {
                     menuItemsList.Remove(userLogoutItem);
@@ -180,7 +180,7 @@ public class UserMenuController
                 break;
             default: // Guest or other roles
                 menuItemsList = this.guestMainMenu.GetMenuItems().ToList();
-                var guestLoginItem = menuItemsList.FirstOrDefault(item => item.id == ConsoleKey.F1);
+                var guestLoginItem = menuItemsList.FirstOrDefault(item => item.id == ConsoleKey.D1);
                 if (guestLoginItem.id != default)
                 {
                     menuItemsList.Remove(guestLoginItem);

@@ -29,6 +29,10 @@ namespace ConsoleApp
                     var context = services.GetRequiredService<StoreDbContext>();
                     context.Database.Migrate();
 
+                    // Seed the database if data doesn't exist
+                    var seeder = services.GetRequiredService<StoreDAL.Data.DatabaseSeeder>();
+                    seeder.Seed();
+
                     var userMenuController = services.GetRequiredService<UserMenuController>();
                     userMenuController.Start();
                 }
@@ -73,6 +77,7 @@ namespace ConsoleApp
                     ConfigureRepositories(services);
                     ConfigureServices(services);
                     ConfigureControllersAndMenus(services);
+                    ConfigureSeeder(services);
                 });
 
         /// <summary>
@@ -122,7 +127,7 @@ namespace ConsoleApp
         }
 
         /// <summary>
-        /// Configures Presentation Layer (Controllers and Menu Builders).
+        /// Configures Presentation Layer (Controllers and Menus).
         /// </summary>
         private static void ConfigureControllersAndMenus(IServiceCollection services)
         {
@@ -130,12 +135,21 @@ namespace ConsoleApp
             services.AddScoped<UserController>();
             services.AddScoped<ProductController>();
             services.AddScoped<ShopController>();
-            services.AddScoped<UserMenuController>(); // Main app controller
+            services.AddScoped<DatabaseController>();
+            services.AddScoped<UserMenuController>();
 
-            // Menu Builders
+            // Menus
             services.AddScoped<AdminMainMenu>();
             services.AddScoped<GuestMainMenu>();
             services.AddScoped<UserMainMenu>();
+        }
+
+        /// <summary>
+        /// Configures the database seeder.
+        /// </summary>
+        private static void ConfigureSeeder(IServiceCollection services)
+        {
+            services.AddScoped<StoreDAL.Data.DatabaseSeeder>();
         }
     }
 }
